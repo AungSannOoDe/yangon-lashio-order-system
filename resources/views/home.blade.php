@@ -119,7 +119,7 @@
                     </li>
                     <li class="flex items-center gap-3 text-slate-300">
                         <span class="w-6 h-6 bg-indigo-500 rounded-full flex items-center justify-center text-white text-xs">✓</span>
-                        ပြီးနောက် ထည့်သွင်းပြီးအချက်လက်များကိုပြန်လည်စစ်ဆေး
+                        ပြီးနောက် ထည့်သွင်းပြီးအချက်လက်များကိုပြန်လည်စစ်ဆေးပါ
                     </li>
                     <li class="flex items-center gap-3 text-slate-300">
                         <span class="w-6 h-6 bg-indigo-500 rounded-full flex items-center justify-center text-white text-xs">✓</span>
@@ -127,9 +127,9 @@
                     </li>
                 </ul>
 
-                <a href="#" class="inline-block mt-8 text-indigo-400 font-bold border-b-2 border-indigo-400 hover:text-indigo-300">
+                <!--<a href="#" class="inline-block mt-8 text-indigo-400 font-bold border-b-2 border-indigo-400 hover:text-indigo-300">
                     Learn More About Security →
-                </a>
+                </a>-->
             </div>
 
             <div class="md:w-1/2 rounded-3xl overflow-hidden shadow-2xl">

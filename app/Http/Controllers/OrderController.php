@@ -74,7 +74,7 @@ class OrderController extends Controller
             // Ensure your filter scope handles 'search', 'status', and 'date'
             ->filter(request(['search', 'status', 'from_date', 'to_date']))
             ->simplePaginate(5)
-           ; // Keeps filters active when clicking 'Next/Previous'
+            ->withQueryString(); // Keeps filters active when clicking 'Next/Previous'
 
         return view('orders', compact('orders'));
     }
