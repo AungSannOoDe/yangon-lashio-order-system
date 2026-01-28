@@ -68,6 +68,7 @@
                                     <a href="{{ url('/sourceareas') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">ပွဲရုံများ</a>
                                     <a href="{{ url('/gates') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">တင်ပို့ဂိတ်များ</a>
                                     <a href="{{ url('/shops') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">ဆိုင်များ</a>
+                                    <a href="{{ url('/units') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">အသုံးပြုသော ယူနစ်များ</a>
                                 </div>
                             </li>
                         @endif
@@ -138,6 +139,7 @@
                                     <li><a class="dropdown-item text-success fw-bold" href="{{ url('/sourceareas') }}">ပွဲရုံများ</a></li>
                                     <li><a class="dropdown-item text-success fw-bold" href="{{ url('/gates') }}">တင်ပို့ဂိတ်များ</a></li>
                                     <li><a class="dropdown-item text-success fw-bold" href="{{ url('/shops') }}">ဆိုင်များ</a></li>
+                                    <li><a class="dropdown-item text-success fw-bold" href="{{ url('/shops') }}">အသုံးပြုသော ယူနစ်များ</a></li>
                                 </ul>
                             </div>
                         </li>

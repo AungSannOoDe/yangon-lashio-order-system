@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Product Categories')
+@section('title', 'Units')
 @section('content')
 <div class="container">
     @if(session('error'))
@@ -17,31 +17,31 @@
             </div>
         </div>
     @endif
-    @if($gates->isEmpty())
+    @if($units->isEmpty())
     <div class="empty text-center">
         <img src="{{ asset('images/empty.gif') }}" alt="empty" style="max-width:250px;">
     </div>
-    <p class="text-center fs-5">လက်တလောတင်ပို့နေသောဂိတ်များမရှိသေးပါ</p>
+    <p class="text-center fs-5">လက်တလောယူနစ်များမရှိသေးပါ</p>
     @else
     {{-- Header Section --}}
     <div class="mb-10 text-center">
         <h2 class="text-2xl font-black text-slate-800">
-            <span class="text-indigo-600">လက်တလောတင်ပို့နေသောဂိတ်များ</span>
+            <span class="text-indigo-600">ယူနစ်များ</span>
         </h2>
 
     </div>
-    {{-- Gate List --}}
+    {{-- Unit List --}}
     <div class="space-y-4">
-        @foreach($gates as $gate)
+        @foreach($units as $unit)
         {{-- This component should now use the Tailwind structure we built --}}
-        <x-item :item="$gate" :delete="'delete'" :type="'gate'" />
+        <x-item :item="$unit" :delete="'delete'" :type="'unit'" />
         @endforeach
     </div>
 
     {{-- Modern Pagination --}}
     <div class="mt-10 flex justify-center">
         <div class=" p-2   rounded-2xl  gap-4  shadow-sm">
-            {{ $gates->links() }}
+            {{ $units->links() }}
         </div>
     </div>
     @endif

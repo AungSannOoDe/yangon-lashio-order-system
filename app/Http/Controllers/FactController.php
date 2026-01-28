@@ -9,6 +9,7 @@ use App\Models\Gate;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Models\Order;
+use App\Models\Unit;
 
 class FactController extends Controller
 {
@@ -40,6 +41,10 @@ class FactController extends Controller
             $product = Product::find($id);
             $product->update(['name' => request()->name]);
             return redirect('/products');
+        }elseif($type == "unit"){
+            $unit = Unit::find($id);
+            $unit->update(['name' => request()->name]);
+            return redirect('/units');
         }
     }
     public function delete($id){
@@ -85,6 +90,15 @@ class FactController extends Controller
            }catch(\Exception $e){
                 return redirect('/products')->with('error', 'အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။');
            }
+        }
+        elseif($type == "unit"){
+            $unit = Unit::find($id);
+            try{
+                $unit->delete();
+                return redirect("/units");
+            }catch(\Exception $e){
+                return redirect('/units')->with('error', 'အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။');
+            }
         }
     }
 }

@@ -36,7 +36,7 @@
                     @endif
                 </div>
                 <p class="font-bold text-lg mb-6
-                    {{ session('success')? 'text-green-700' : 'text-red-700' }}">
+                    {{ session('success')? 'text-green-700' : 'text-red-500' }}">
                     {{ session('success') ?? session('error') }}
                 </p>
                 <button @click="show = false" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold">
@@ -133,6 +133,23 @@
                 <form action="{{ url('/gate/add') }}" method="POST" class="p-6 pt-0">
                     @csrf
                     <input type="text" name="gate" placeholder="ဂိတ်အမည်" class="w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white mb-4">
+                    <button class="w-full py-3 bg-amber-600 text-white rounded-2xl font-bold">သိမ်းရန်</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl overflow-hidden transition-all duration-300">
+            <button @click="activeForm = (activeForm === 'unit' ? null : 'unit')" class="w-full flex items-center gap-4 p-6 text-white group">
+                <div class="w-12 h-12 rounded-2xl bg-amber-500/20 flex items-center justify-center group-hover:bg-amber-500 transition-colors">
+                    <i class="fa-solid fa-box text-xl"></i>
+                </div>
+                <span class="font-bold text-lg">Unit အသစ်ထည့်ရန်</span>
+                <i class="fa-solid fa-chevron-down ml-auto transition-transform" :class="activeForm === 'unit' ? 'rotate-180' : ''"></i>
+            </button>
+            <div x-show="activeForm === 'unit'" x-collapse>
+                <form action="{{ url('/unit/add') }}" method="POST" class="p-6 pt-0">
+                    @csrf
+                    <input type="text" name="unit" placeholder="Unit အမည်" class="w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white mb-4">
                     <button class="w-full py-3 bg-amber-600 text-white rounded-2xl font-bold">သိမ်းရန်</button>
                 </form>
             </div>
