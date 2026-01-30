@@ -87,11 +87,12 @@
 
                 <div class="md:col-span-2">
                     <label class="block text-sm font-semibold text-gray-700 mb-1">ယူနစ်</label>
-                    <select name="unit" required
+                    <select name="unit_id" required
                         class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                        <option value="ခြင်း">ခြင်း</option>
-                        <option value="အိတ်">အိတ်</option>
-                        <option value="‌ေဖာ့ဘူး">‌ေဖာ့ဘူး</option>
+                        <option value="0">ယူနစ်ရွေးပါ</option>
+                        @foreach($units as $unit)
+                        <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                        @endforeach
                     </select>
                 </div>
 

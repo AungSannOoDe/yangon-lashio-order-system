@@ -111,7 +111,7 @@
             </div>
             <div>
                 <p class="text-[10px] font-bold text-slate-400 uppercase">ဈေးနှုန်း / Unit</p>
-                <p class="text-slate-700 font-medium">{{ number_format($order->price) }} MMK ({{ $order->unit }})</p>
+                <p class="text-slate-700 font-medium">{{ number_format($order->price) }} MMK ({{ $order->unit->name }})</p>
             </div>
             @if(auth()->user()->role_id == 2)
                 <div>
@@ -131,7 +131,7 @@
             @if(auth()->user()->role_id == 2)
                 <form action="{{ route('orders.update', $order->id) }}" method="POST" class="flex gap-2 mt-1">
                     @csrf
-                    <input type="text" name="remark" class="flex-grow min-w-0 text-sm border-slate-200 rounded-xl focus:ring-indigo-500" value="{{ $order->remark }}" placeholder="မှတ်ချက်ထည့်ပါ။">
+                    <input type="text" name="remark" class="flex-grow min-w-0 text-sm border-slate-200 px-3 rounded-xl focus:ring-indigo-500" value="{{ $order->remark }}" placeholder="မှတ်ချက်ထည့်ပါ။">
                     <button type="submit" class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold">သိမ်းရန်</button>
                 </form>
             @else

@@ -14,7 +14,7 @@ class Order extends Model
         'product_name',
         'weight',
         'net_weight',
-        'unit',
+        'unit_id',
         'price',
         'total',
         'status',
@@ -23,7 +23,7 @@ class Order extends Model
         'gate_id',
         'weightfee'
     ];
-    protected $with = ['user', 'category', 'sourceArea', 'shop', 'gate'];
+    protected $with = ['user', 'category', 'sourceArea', 'unit', 'shop', 'gate'];
     public function getCategoryNameAttribute()
     {
         return $this->category['name'] ?? 'N/A';
@@ -39,6 +39,9 @@ class Order extends Model
     public function sourceArea()
     {
         return $this->belongsTo(SourceArea::class);
+    }
+    public function unit(){
+        return $this->belongsTo(Unit::class);
     }
     public function shop()
     {
@@ -62,7 +65,9 @@ class Order extends Model
         $query->when($filter['nameunit'] ?? false, function ($query, $nameunit) {
             $query->where(function ($q) use ($nameunit) {
                 $q->where('product_name', 'like', "%{$nameunit}%")
-                    ->orWhere('unit', 'like', "%{$nameunit}%");
+                    ->orWhereHas('unit', function ($q) use ($nameunit){
+                        $q->where('name', $nameunit);
+                    });
             });
         });
     }

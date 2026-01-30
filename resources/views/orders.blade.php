@@ -18,7 +18,7 @@
     @endif
 
     <!-- Filter Box -->
-    @if(auth()->user()->id == 2 || auth()->user()->id == 1)
+    @if(auth()->user()->role_id == 2 || auth()->user()->role_id == 1)
     <div class="flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0 mb-6 items-start">
 
         <!-- Status Dropdown -->
