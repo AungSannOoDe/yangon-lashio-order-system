@@ -87,7 +87,7 @@
             </span>
         </h2>
         @forelse($orders as $order)
-        <x-orderCard :order="$order" />
+        <x-orderCard :order="$order" :shops="$shops" />
         @empty
         <div class="flex justify-center my-10">
             <img src="{{ asset('images/empty.gif') }}" alt="empty" class="max-w-xs">

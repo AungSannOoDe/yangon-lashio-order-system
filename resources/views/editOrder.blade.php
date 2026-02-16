@@ -146,7 +146,7 @@
                         class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500">
                 </div>
 
-                @if(isset($order->shop_id))
+                {{-- @if(isset($order->shop_id))
                 <div class="md:col-span-6">
                     <label for="shop" class="block text-sm font-semibold text-gray-700 mb-1">ပို့ဆောင်မည့်ဆိုင် (Refer To)</label>
                     <select name="shop_id" id="shop" class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500">
@@ -158,7 +158,7 @@
                         @endforeach
                     </select>
                 </div>
-                @endif
+                @endif --}}
             </div>
 
             <div class="mt-8">

@@ -58,7 +58,7 @@ class OrderController extends Controller
             $order->price = $request->price;
             $order->total = $request->total;
             $order->status = "ပို့နေဆဲ";
-            $order->shop_id = $request->shop_id;
+            //$order->shop_id = $request->shop_id;
             $order->gate_id = $request->gate_id;
             $order->weightfee = $request->weight_price;
             $order->save();
@@ -75,8 +75,9 @@ class OrderController extends Controller
             ->filter(request(['shop','status', 'from_date', 'to_date', 'nameunit']))
             ->simplePaginate(5)
             ->withQueryString(); // Keeps filters active when clicking 'Next/Previous'
+        $shops = Shop::latest()->get();
 
-        return view('orders', compact('orders'));
+        return view('orders', compact('orders', 'shops'));
     }
     public function show($id)
     {
@@ -86,7 +87,9 @@ class OrderController extends Controller
             ->filter(request(['shop','status', 'from_date', 'to_date', 'nameunit']))
             ->simplePaginate(5)
             ->withQueryString();
-        return view('orders', compact('orders'));
+        
+        $shops = Shop::latest()->get();
+        return view('orders', compact('orders', 'shops'));
     }
 
     public function edit(Order $order)
@@ -105,8 +108,8 @@ class OrderController extends Controller
             return back();
         }
         // Otherwise, update remark
-        elseif (!empty(request()->remark)) {
-            $order->update(['remark' => request()->remark]);
+        elseif (!empty(request()->remark) || !empty(request()->shop_id)) {
+            $order->update(['shop_id' => request()->shop_id, 'remark' => request()->remark]);
         }
         //Otherwise, update data by id
         else {
@@ -146,7 +149,7 @@ class OrderController extends Controller
             $order->total = $request->total;
             $order->gate_id = $request->gate_id;
             $order->weightfee = $request->weight_price;
-            $order->shop_id = $request->shop_id ?? null;
+            //$order->shop_id = $request->shop_id ?? null;
             $order->save();
             return redirect("/user/" . Auth::id() . "/orders");
         } catch (\Exception $e) {

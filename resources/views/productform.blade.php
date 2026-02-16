@@ -130,7 +130,7 @@
                         class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500">
                 </div>
 
-                <div class="md:col-span-6">
+                <!--<div class="md:col-span-6">
                     <label class="block text-sm font-semibold text-gray-700 mb-1">ပို့ဆောင်မည့်ဆိုင် (Refer To)</label>
                     <select name="shop_id" class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500">
                         <option value="">ဆိုင်အမည်ရွေးပါ (Optional)</option>
@@ -138,7 +138,7 @@
                         <option value="{{ $shop->id }}">{{ $shop->name }}</option>
                         @endforeach
                     </select>
-                </div>
+                </div>-->
             </div>
 
             <div class="mt-8">

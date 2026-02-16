@@ -26,10 +26,10 @@
             {{-- Logo --}}
             <div class="flex items-center gap-3">
                 <img src="{{ asset('images/logo1.png') }}" alt="" class="h-10">
-                <h1 class="text-xl font-bold italic">
+                <a  href="{{ url('/home') }}" class="h1 text-xl font-bold italic">
                     <span class="text-green-600">Shipping</span>
                     <span class="text-indigo-600">Record</span>
-                </h1>
+                </a>
             </div>
 
             {{-- Navigation --}}
