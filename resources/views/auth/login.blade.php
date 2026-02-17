@@ -55,7 +55,7 @@ User Login Form
                         class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
                     <label for="remember" class="ml-2 text-stone-600">Remember me</label>
                 </div>
-                <a href="{{ route('user.forgot-password') }}" class="text-indigo-500 hover:underline">Forgot password?</a>
+                <a href="{{ route('user.forgot-password') }}" class="text-indigo-500 hover:underline">စကားဝှက်မေ့နေပါသလား?</a>
             </div>
 
             <div class="pt-2">
