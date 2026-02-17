@@ -60,17 +60,17 @@ User Login Form
 
             <div class="pt-2">
                 <button type="submit" class="btn-primary w-full py-2  bg-indigo-400 text-white rounded-lg hover:bg-indigo-500 transition shadow-md">
-                    Sign in
+                    အကောင့်ဝင်ရန်
                 </button>
                 <a href="{{ url('/role') }}" class="block text-center mt-4 text-sm text-stone-500 hover:text-stone-800">
-                    ← Back
+                    ← နောက်သို့
                 </a>
             </div>
         </form>
 
         <p class="text-center text-stone-500 text-sm font-medium">
-            Don't have an account?
-            <a href="{{ route('user.register') }}" class="text-indigo-500 font-bold hover:underline">Sign Up</a>
+            အကောင့်မရှိဘူးလား?
+            <a href="{{ route('user.register') }}" class="text-indigo-500 font-bold hover:underline">အကောင့်ဖွင့်ရန်</a>
         </p>
     </div>
 </section>
