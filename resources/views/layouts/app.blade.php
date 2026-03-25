@@ -217,7 +217,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-center items-center gap-4">
                 <p class="text-slate-400 text-sm">2026 &copy; Yangon–Lashio Shipping Record System. All rights reserved.</p>
                 <div class="flex gap-6 grayscale opacity-50">
                     </div>

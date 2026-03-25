@@ -21,8 +21,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/user/login', [LoginController::class, 'userLoginForm'])->name('user.login');
-Route::get('/admin/login', [LoginController::class, 'adminLoginForm'])->name('admin.login');
+Route::get('/user/login', [LoginController::class, 'userLoginForm'])->name('user.login')->middleware('guest');
+Route::get('/admin/login', [LoginController::class, 'adminLoginForm'])->name('admin.login')->middleware('guest');
 
 Route::get('/role', function() {
     return view('userole');
