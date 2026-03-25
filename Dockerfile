@@ -1,38 +1,35 @@
-# Use PHP 8.3 FPM Alpine
-FROM php:8.3-fpm-alpine
+# Stage 1: Composer
+FROM composer:latest as vendor
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader
 
-# 1. Install Node.js (needed for Vite/Tailwind)
-COPY --from=node:20-alpine /usr/lib /usr/lib
-COPY --from=node:20-alpine /usr/local/share /usr/local/share
-COPY --from=node:20-alpine /usr/local/lib /usr/local/lib
-COPY --from=node:20-alpine /usr/local/bin /usr/local/bin
-
-# 2. Install system dependencies for PHP extensions
-RUN apk add --no-cache \
-    git curl libpng-dev libxml2-dev zip unzip oniguruma-dev libzip-dev icu-dev
-
-# 3. Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
-
-# 4. Get Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# 5. Setup working directory
-WORKDIR /var/www
-COPY . /var/www
-
-# 6. INSTALL PHP DEPENDENCIES (Fixes your error)
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# 7. INSTALL NODE & BUILD ASSETS (Fixes CSS/JS issues)
+# Stage 2: Frontend
+FROM node:20-alpine as frontend
+WORKDIR /app
+COPY . .
 RUN npm install && npm run build
 
-# 8. Set correct permissions for Laravel
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+# Stage 3: Final Image
+FROM php:8.3-fpm-alpine
 
-# 9. Expose port 8000 for Coolify
+RUN apk add --no-cache \
+    libpng-dev \
+    libzip-dev \
+    zip unzip git \
+    oniguruma-dev icu-dev \
+    libjpeg-turbo-dev freetype-dev
+
+RUN docker-php-ext-install pdo_mysql mbstring zip intl bcmath gd
+
+WORKDIR /var/www
+
+COPY . .
+COPY --from=vendor /app/vendor ./vendor
+COPY --from=frontend /app/public/build ./public/build
+
+RUN chown -R www-data:www-data storage bootstrap/cache
+
 EXPOSE 8000
 
-# Start Laravel's built-in server
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+CMD ["php-fpm"]
