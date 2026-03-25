@@ -4,23 +4,19 @@
 <div class="max-w-4xl mx-auto px-6 py-12">
     {{-- Error Handling with Tailwind Modal --}}
     @if(session('error'))
-    <div x-data="{ show: true }" x-show="show"
-         class="fixed inset-0 z-[100] flex items-center justify-center p-4">
-        {{-- Backdrop --}}
-        <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm"></div>
-
-        {{-- Modal Content --}}
-        <div class="relative bg-white rounded-3xl shadow-2xl p-8 max-w-sm w-full text-center border border-slate-100">
-            <div class="mb-4 text-red-500 text-6xl">
-                <i class="fa-solid fa-circle-xmark"></i>
+    <div x-data="{ show: true }" x-show="show" class="fixed inset-0 z-[100] flex items-start my-3 justify-center px-4">
+            <div class="bg-white/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white max-w-sm w-full text-center">
+                <div class="mb-4 text-6xl">
+                    <i class="fa-solid fa-xmark text-2xl text-red-600"></i>
+                </div>
+                <p class="font-bold text-lg mb-6 text-red-500">
+                    {{ session('error') }}
+                </p>
+                <button @click="show = false" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold">
+                    Done
+                </button>
             </div>
-            <p class="text-slate-800 font-bold text-lg mb-6">{{ session('error') }}</p>
-            <button @click="show = false"
-                    class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition">
-                ပိတ်ရန်
-            </button>
         </div>
-    </div>
     @endif
 
     @if($products->isEmpty())
@@ -35,8 +31,10 @@
     @else
         {{-- Header Section --}}
         <div class="mb-10 text-center">
-            <h2 class="text-3xl font-black text-slate-800 mb-2">ကုန်အမည်များ</h2>
-            <div class="w-20 h-1.5 bg-indigo-600 mx-auto rounded-full"></div>
+            <h2 class="text-2xl font-black text-slate-800">
+                <span class="text-indigo-600">ကုန်အမည်များ</span>
+            </h2>
+            
         </div>
 
         {{-- Filters Section --}}

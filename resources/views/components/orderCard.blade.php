@@ -1,4 +1,4 @@
-@props(['order'])
+@props(['order', 'shops'])
 
 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition group mb-4" x-data="{ open: false }">
     {{-- Header: Date + Status --}}
@@ -111,8 +111,14 @@
             </div>
             <div>
                 <p class="text-[10px] font-bold text-slate-400 uppercase">ဈေးနှုန်း / Unit</p>
-                <p class="text-slate-700 font-medium">{{ number_format($order->price) }} MMK ({{ $order->unit }})</p>
+                <p class="text-slate-700 font-medium">{{ number_format($order->price) }} MMK ({{ $order->unit->name }})</p>
             </div>
+            @if(auth()->user()->role_id == 1)
+            <div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase">လွှဲပြောင်းထားသောဆိုင်</p>
+                <p class="text-slate-700 font-medium">{{ isset($order->shop->name)?$order->shop->name:' - ' }}</p>
+            </div>
+            @endif
             @if(auth()->user()->role_id == 2)
                 <div>
                     <p class="text-[10px] font-bold text-slate-400 uppercase">သင့်ငွေ</p>
@@ -127,14 +133,30 @@
 
         {{-- Remark Section --}}
         <div class="mt-4">
-            <p class="text-[10px] font-bold text-slate-400 uppercase">မှတ်ချက် (Remark)</p>
             @if(auth()->user()->role_id == 2)
-                <form action="{{ route('orders.update', $order->id) }}" method="POST" class="flex gap-2 mt-1">
+                <form action="{{ route('orders.update', $order->id) }}" method="POST" class="block md:flex justify-between gap-2 mt-1">
                     @csrf
-                    <input type="text" name="remark" class="flex-grow min-w-0 text-sm border-slate-200 rounded-xl focus:ring-indigo-500" value="{{ $order->remark }}" placeholder="မှတ်ချက်ထည့်ပါ။">
-                    <button type="submit" class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold">သိမ်းရန်</button>
+                    <div class="w-full md:w-3/6 my-2 md:my-0">
+                        <label for="shop" class="text-[10px] block font-bold text-slate-400 uppercase">လွှဲပြောင်းထားသောဆိုင်</label>
+                        <select name="shop_id" id="shop" class="w-full">
+                            <option value="">ပို့ဆောင်မည့်ဆိုင် (Refer To)</option>
+                            @if(isset($shops))
+                            @foreach($shops as $shop)
+                                <option value="{{$shop->id}}" {{(isset($order->shop_id) && ($order->shop_id == $shop->id))? 'selected': '' }}>
+                                    {{ $shop->name }}
+                                </option>
+                            @endforeach
+                            @endif
+                        </select>
+                    </div>
+                    <div class="w-full md:w-2/6 my-2 md:my-0">
+                        <p class="text-[10px] block font-bold text-slate-400 uppercase">မှတ်ချက် (Remark)</p>
+                        <input type="text" name="remark" class="flex-grow min-w-0 py-2 text-sm border-slate-200 px-3 rounded-xl focus:ring-indigo-500" value="{{ $order->remark }}" placeholder="မှတ်ချက်ထည့်ပါ။">
+                    </div>
+                    <button type="submit" class="bg-slate-800 text-white px-5 w-full md:w-1/6 sm:w-[150px] h-8 rounded-xl text-xs font-bold">သိမ်းရန်</button>
                 </form>
             @else
+                <p class="text-[10px] mb-3 block font-bold text-slate-400 uppercase">မှတ်ချက် (Remark)</p>
                 <p class="text-slate-600 text-sm">{{ $order->remark ?? '-' }}</p>
             @endif
         </div>

@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SourceAreaController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
@@ -20,8 +21,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/user/login', [LoginController::class, 'userLoginForm'])->name('user.login');
-Route::get('/admin/login', [LoginController::class, 'adminLoginForm'])->name('admin.login');
+Route::get('/user/login', [LoginController::class, 'userLoginForm'])->name('user.login')->middleware('guest');
+Route::get('/admin/login', [LoginController::class, 'adminLoginForm'])->name('admin.login')->middleware('guest');
 
 Route::get('/role', function() {
     return view('userole');
@@ -48,6 +49,7 @@ Route::post('/product/add', [ProductController::class, 'store']);
 Route::post('/sourceArea/add', [SourceAreaController::class, 'store']);
 Route::post('/gate/add', [GateController::class, 'store']);
 Route::post('/shop/add', [ShopController::class, 'store']);
+Route::post('/unit/add', [UnitController::class, 'store']);
 Route::post('/orders/update/{order}', [OrderController::class, 'edit'])->name('orders.update');
 Route::get('orders/edit/{order}', [OrderController::class, 'edit'])->name('orders.edit');
 Route::post('/orders/edit/{order}', [OrderController::class, 'update'])->name('orders.edit');
@@ -56,6 +58,7 @@ Route::get('/products', [ProductController::class, 'index']);
 Route::get('/sourceareas', [SourceAreaController::class, 'index']);
 Route::get('/gates', [GateController::class, 'index']);
 Route::get('/shops', [ShopController::class, 'index']);
+Route::get('/units', [UnitController::class, 'index']);
 Route::post('/facts/update/{id}', [FactController::class, 'edit'])->name('facts.update');
 Route::delete('/facts/delete/{id}', [FactController::class, 'delete'])->name('facts.delete');
 Route::get('/change-password', [UserController::class, 'showChangePasswordForm']);

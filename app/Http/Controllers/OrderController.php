@@ -11,7 +11,7 @@ use App\Models\Order;
 use App\Models\Shop;
 use App\Models\Gate;
 use App\Models\Product;
-
+use App\Models\Unit;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Facades\Response;
@@ -27,7 +27,8 @@ class OrderController extends Controller
         $areas = SourceArea::latest()->get();
         $shops = Shop::latest()->get();
         $gates = Gate::latest()->get();
-        return view('productform', compact('categories', 'areas', 'shops', 'gates'));
+        $units = Unit::latest()->get();
+        return view('productform', compact('categories', 'areas', 'shops', 'gates', 'units'));
     }
     public function create(Request $request)
     {
@@ -39,7 +40,7 @@ class OrderController extends Controller
             'weight' => 'required|numeric',
             'netweight' => 'required|numeric',
             'price' => 'required|numeric',
-            'unit' => 'required|string',
+            'unit_id' => 'required|exists:units,id',
         ]);
         if ($validator->fails()) {
             return back()->with('error', 'အချက်အလက်များကိုပြည့်စုံစွာထည့်ပါ');
@@ -53,17 +54,17 @@ class OrderController extends Controller
             $order->product_name = $request->product;
             $order->weight = $request->weight;
             $order->net_weight = $request->netweight;
-            $order->unit = $request->unit;
+            $order->unit_id = $request->unit_id;
             $order->price = $request->price;
             $order->total = $request->total;
-            $order->status = $request->status;
-            $order->shop_id = $request->shop_id;
+            $order->status = "ပို့နေဆဲ";
+            //$order->shop_id = $request->shop_id;
             $order->gate_id = $request->gate_id;
             $order->weightfee = $request->weight_price;
             $order->save();
             return back()->with('success', 'အောင်မြင်စွာ တင်သွင်းပြီးပါပြီ။');
         } catch (\Exception $e) {
-            return back()->with('error', 'တင်သွင်းရာတွင် အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။');
+            return back()->with('error', 'တင်သွင်းရာတွင် အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။' . $e);
         }
     }
     public function index()
@@ -71,21 +72,24 @@ class OrderController extends Controller
         $orders = Order::query()
             ->orderBy('status', 'asc')
             ->orderBy('created_at', 'desc')
-            // Ensure your filter scope handles 'search', 'status', and 'date'
-            ->filter(request(['search', 'status', 'from_date', 'to_date']))
+            ->filter(request(['shop','status', 'from_date', 'to_date', 'nameunit']))
             ->simplePaginate(5)
-           ; // Keeps filters active when clicking 'Next/Previous'
+            ->withQueryString(); // Keeps filters active when clicking 'Next/Previous'
+        $shops = Shop::latest()->get();
 
-        return view('orders', compact('orders'));
+        return view('orders', compact('orders', 'shops'));
     }
     public function show($id)
     {
         $orders = Order::where('user_id', $id)
             ->orderBy('status', 'asc')
             ->orderBy('created_at', 'desc')
-            ->filter(request(['status', 'from_date', 'to_date']))
-            ->simplePaginate(5);
-        return view('orders', compact('orders'));
+            ->filter(request(['shop','status', 'from_date', 'to_date', 'nameunit']))
+            ->simplePaginate(5)
+            ->withQueryString();
+        
+        $shops = Shop::latest()->get();
+        return view('orders', compact('orders', 'shops'));
     }
 
     public function edit(Order $order)
@@ -104,16 +108,18 @@ class OrderController extends Controller
             return back();
         }
         // Otherwise, update remark
-        elseif (!empty(request()->remark)) {
-            $order->update(['remark' => request()->remark]);
+        elseif (!empty(request()->remark) || !empty(request()->shop_id)) {
+            $order->update(['shop_id' => request()->shop_id, 'remark' => request()->remark]);
         }
         //Otherwise, update data by id
         else {
             $categories = Category::latest()->get();
             $areas = SourceArea::latest()->get();
             $gates = Gate::latest()->get();
+            $units = Unit::latest()->get();
+            $shops = Shop::latest()->get();
             $products = Product::where('category_id', $order->category->id)->get();
-            return view('editOrder', compact('order', 'categories', 'areas', 'gates', 'products'));
+            return view('editOrder', compact('order', 'categories', 'areas', 'gates', 'units', 'shops', 'products'));
         }
 
         return back();
@@ -126,6 +132,7 @@ class OrderController extends Controller
             'product_name' => 'required',
             'weight' => 'required|numeric',
             'netweight' => 'required|numeric',
+            'unit_id' => 'required|string',
             'price' => 'required|numeric',
         ]);
         if ($validator->fails()) {
@@ -137,10 +144,12 @@ class OrderController extends Controller
             $order->product_name = $request->product_name;
             $order->weight = $request->weight;
             $order->net_weight = $request->netweight;
+            $order->unit_id = $request->unit_id;
             $order->price = $request->price;
             $order->total = $request->total;
             $order->gate_id = $request->gate_id;
             $order->weightfee = $request->weight_price;
+            //$order->shop_id = $request->shop_id ?? null;
             $order->save();
             return redirect("/user/" . Auth::id() . "/orders");
         } catch (\Exception $e) {
@@ -193,18 +202,30 @@ class OrderController extends Controller
                     $order->product_name,
                     $order->weight,
                     $order->net_weight,
-                    $order->unit,
+                    $order->unit['name'],
                     $order->price,
                     $order->total,
                     $order->status,
                     $order->gate['name'],
-                    $order->shop['name']??'',
+                    $order->shop['name'] ?? '',
                     $order->weightfee
                 ]
             ], null, "A{$row}");
 
             $row++;
         }
+
+        // Last data row
+        $lastDataRow = $row - 1;
+
+        // Grand Total Row
+        $sheet->setCellValue("I{$row}", 'စုစုပေါင်းအနှစ်ချုပ်ကျသင့်ငွေ (Grand Total)');
+        $sheet->setCellValue("J{$row}", "=SUM(J2:J{$lastDataRow})");
+
+        // Style total row
+        $sheet->getStyle("I{$row}:J{$row}")
+                ->getFont()
+                ->setBold(true);
 
         $fileName = 'filtered_orders.xlsx';
         $writer = new Xlsx($spreadsheet);

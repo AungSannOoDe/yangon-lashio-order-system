@@ -1,62 +1,73 @@
+
+
+
+
+
 @extends('layouts.app')
 
 @section('title', 'change password')
 @section('content')
-<section class="relative flex flex-col  items-center  min-h-screen bg-white">
+<section class="relative flex flex-col items-center justify-center min-h-screen">
 
+    {{-- Success Message ပြသရန် (Optional) --}}
     @if (session('success'))
-        <div class="fixed top-10 flex items-center bg-green-50 border border-green-200 text-green-700 px-6 py-3 rounded-2xl shadow-sm z-50">
-            <i class="fa-solid fa-circle-check mr-2"></i>
-            <span class="text-sm font-medium">{{ session('success') }}</span>
+        <div class="absolute top-10 max-w-sm w-full bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded text-center">
+            {{ session('success') }}
         </div>
     @endif
 
-    <div class="w-full max-w-sm space-y-10 p-6 z-10">
+    <div class="w-full max-w-sm space-y-5 p-3 z-10">
         <div class="space-y-3 text-center">
-            <h1 class="text-3xl font-bold text-stone-900 tracking-tight">Update Password</h1>
+            <h1 class="text-3xl font-bold text-stone-900">Change Your Password</h1>
             <p class="text-stone-500 text-base leading-relaxed">
-                စကားဝှက်အသစ် ပြောင်းလဲသတ်မှတ်ရန်
+                စကားဝှက်ပြောင်းရန်
             </p>
         </div>
 
-        <form method="POST" action="{{ route('password.update') }}" class="space-y-6">
+        <form action="{{ route('password.update') }}" method="POST" class="space-y-6">
             @csrf
+
+            {{-- Current pwd --}}
             <div>
-                <label for="current_password" class="block text-sm font-medium text-stone-700">လက်ရှိစကားဝှက်</label>
-                <input type="password" name="current_password" id="current_password" required
-                    class="input-box mt-1.5 w-full @error('current_password') border-red-500 ring-1 ring-red-500 @enderror"
-                    placeholder="••••••••">
+                <label for="curpwd" class="block text-sm font-medium text-stone-700">လက်ရှိစကားဝှက်</label>
+                <input type="password" name="current_password" id="curpwd"  autofocus
+                    class="input-box mt-1.5 w-full 
+                    @error('current_password') border-red-500 ring-1 ring-red-500 @enderror 
+                    " placeholder="********">
 
                 @error('current_password')
                     <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
                 @enderror
             </div>
+
+            {{-- New pwd --}}
             <div>
-                <label for="new_password" class="block text-sm font-medium text-stone-700">စကားဝှက်အသစ်</label>
-                <input type="password" name="new_password" id="new_password" required
+                <label for="newpwd" class="block text-sm font-medium text-stone-700">စကားဝှက်အသစ်</label>
+                <input type="password" name="new_password" id="newpwd"
                     class="input-box mt-1.5 w-full @error('new_password') border-red-500 ring-1 ring-red-500 @enderror"
-                    placeholder="Enter new password">
+                    placeholder="********">
 
                 @error('new_password')
                     <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
                 @enderror
             </div>
 
+            {{-- Confirm pwd --}}
             <div>
-                <label for="new_password_confirmation" class="block text-sm font-medium text-stone-700">စကားဝှက်အသစ်အတည်ပြုပါ</label>
-                <input type="password" name="new_password_confirmation" id="new_password_confirmation" required
-                    class="input-box mt-1.5 w-full"
-                    placeholder="Confirm new password">
+                <label for="confirmpwd" class="block text-sm font-medium text-stone-700">စကားဝှက်အသစ်အတည်ပြုပါ</label>
+                <input type="password" name="new_password_confirmation" id="confirmpwd"
+                    class="input-box mt-1.5 w-full @error('new_password') border-red-500 ring-1 ring-red-500 @enderror"
+                    placeholder="********">
+
+                @error('new_password')
+                    <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
+                @enderror
             </div>
 
-            <div class="pt-4">
-                <button type="submit" class="btn-primary w-full py-3 bg-indigo-400 text-white font-semibold rounded-xl hover:bg-indigo-500 transition-all shadow-md active:scale-95">
+            <div class="pt-2">
+                <button type="submit" class="btn-primary w-full py-2  bg-indigo-400 text-white rounded-lg hover:bg-indigo-500 transition shadow-md">
                     စကားဝှက်ပြောင်းရန်
                 </button>
-                
-                <a href="{{ url()->previous() }}" class="block text-center mt-6 text-sm text-stone-400 hover:text-stone-800 transition">
-                    ← မူလစာမျက်နှာသို့
-                </a>
             </div>
         </form>
     </div>

@@ -14,7 +14,7 @@ class Order extends Model
         'product_name',
         'weight',
         'net_weight',
-        'unit',
+        'unit_id',
         'price',
         'total',
         'status',
@@ -23,7 +23,7 @@ class Order extends Model
         'gate_id',
         'weightfee'
     ];
-    protected $with = ['user', 'category', 'sourceArea', 'shop', 'gate'];
+    protected $with = ['user', 'category', 'sourceArea', 'unit', 'shop', 'gate'];
     public function getCategoryNameAttribute()
     {
         return $this->category['name'] ?? 'N/A';
@@ -40,6 +40,9 @@ class Order extends Model
     {
         return $this->belongsTo(SourceArea::class);
     }
+    public function unit(){
+        return $this->belongsTo(Unit::class);
+    }
     public function shop()
     {
         return $this->belongsTo(Shop::class);
@@ -53,11 +56,29 @@ class Order extends Model
         $query->when($filter['status'] ?? false, function ($query, $status) {
             $query->where('status', $status);
         });
-        $query->when($filter['from_date'] ?? false, function($query, $from_date){
+        $query->when($filter['shop']?? false, function ($query, $shop){
+            if($shop == "all"){
+                $query->whereNotNull('shop_id');
+            }
+            else{
+                $query->whereHas('shop', function ($q) use($shop){
+                    $q->where('name', $shop);
+                });
+            }
+        });
+        $query->when($filter['from_date'] ?? false, function ($query, $from_date) {
             $query->whereDate('export_date', '>=', $from_date);
         });
-        $query->when($filter['to_date'] ?? false, function($query, $to_date){
+        $query->when($filter['to_date'] ?? false, function ($query, $to_date) {
             $query->whereDate('export_date', '<=', $to_date);
+        });
+        $query->when($filter['nameunit'] ?? false, function ($query, $nameunit) {
+            $query->where(function ($q) use ($nameunit) {
+                $q->where('product_name', 'like', "%{$nameunit}%")
+                    ->orWhereHas('unit', function ($q) use ($nameunit){
+                        $q->where('name', $nameunit);
+                    });
+            });
         });
     }
 }

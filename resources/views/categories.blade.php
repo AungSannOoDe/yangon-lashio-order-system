@@ -9,15 +9,12 @@
         </div>
     @else
         {{-- Header Section --}}
-        <div class="flex items-end justify-between mb-6">
+        <div class="flex items-end justify-center mb-6">
             <div>
                 <h2 class="text-2xl font-black text-slate-800">
                     တင်ပို့နေသော <span class="text-indigo-600">အမျိုးအစားများ</span>
                 </h2>
             </div>
-            <p class="text-slate-400 text-sm italic">
-                Showing {{ $categories->count() }} records
-            </p>
         </div>
 
         {{-- The List --}}

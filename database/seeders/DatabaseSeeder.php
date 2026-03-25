@@ -9,6 +9,7 @@ use App\Models\Shop;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\SourceArea;
+use App\Models\Unit;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -78,6 +79,9 @@ class DatabaseSeeder extends Seeder
         Gate::create([ 'name' => 'မဝင်းမာ']);
         Gate::create([ 'name' => 'မိုးထက်']);
         Gate::create([ 'name' => 'ဧရာဝတီ']);
-       
+
+        Unit::create(['name' => 'ခြင်း']);
+        Unit::create(['name' => 'အိတ်']);
+        Unit::create(['name' => 'ဖော့ဘူး']);
     }
 }

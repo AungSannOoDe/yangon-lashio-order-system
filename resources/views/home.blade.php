@@ -16,17 +16,20 @@
                 </h1>
 
                 <p class="text-xl text-slate-600 leading-relaxed">
-                    Yangon–Lashio Shipping System သည် ပင်လယ်ထွက်ကုန်များကို အချိန်မီနှင့် စနစ်တကျ တင်ပို့ပေးသော စနစ်တစ်ခုဖြစ်ပါသည်။ အသုံးပြုသူများအနေဖြင့် တင်ပို့ပြီးသော ထွက်ကုန်များ၏ စာရင်းများကို လွယ်ကူစွာ တွက်ချက်နိုင်ပြီး တင်ပို့ထားသော ပစ္စည်းအချက်အလက်များကို ပြန်လည်ကြည့်ရှုနိုင်ပါသည်။
+                    သင်ပို့ချင်သော ပစ္စည်းများကိုအချိန်မရွေး
+                    အလွယ်တကူ ဤစနစ်မှတဆင့် စာရင်းသွင်းနိုင်ပါပြီ။
+                    ကျွန်တော်တို့ စနစ်သည် သင့်ပို့ဆောင်မှုကို ပိုမို ချောမွေ့အောင်
+                    ကူညီပေးပါမည်။
                 </p>
 
                 <div class="flex gap-4">
-                    <a href="{{ url('/order/add') }}"
+                    <!-- <a href="{{ url('/facts/add') }}"
                        class="bg-indigo-600 px-8 py-4 rounded-xl text-white font-bold hover:scale-105 transition shadow-xl">
-                       တင်ပို့ကုန်ထည့်သွင်းရန်
-                    </a>
+                        Start Shipping
+                    </a> -->
 
                     <a href="#features"
-                       class="bg-white border border-slate-200 px-8 py-4 rounded-xl text-slate-700 font-bold hover:bg-slate-50 transition">
+                       class="bg-indigo-600 px-8 py-4 rounded-xl text-white font-bold hover:scale-105 transition shadow-xl">
                         View Demo
                     </a>
                 </div>
@@ -48,9 +51,12 @@
     <section id="features" class="max-w-7xl mx-auto py-24 px-6">
         <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <h2 class="text-4xl font-bold text-slate-900">
-                ဘာကြောင့် ရွေးချယ်သင့်သလဲ
+                <!-- Why Modern Logistics Need DokanE -->
+                 Features of Shipping Record System
             </h2>
-            
+            <!-- <p class="text-slate-500 text-lg">
+                The most powerful POS and tracking tool designed for Myanmar's trading routes.
+            </p> -->
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -62,7 +68,8 @@
                 </div>
                 <h3 class="text-xl font-bold mb-4">Weight-Based Pricing</h3>
                 <p class="text-slate-600 leading-relaxed">
-                    ကျွန်တော်တို့၏ စနစ်သည် အလေးချိန်ပေါ်မူတည်၍ တွက်ချက်ပေးသော စနစ်ဖြစ်ပါသည်။ ထို့ကြောင့် သင့်အနေဖြင့် စာရွက်စာတမ်းများ များစွာမလိုအပ်ဘဲ လွယ်ကူအဆင်ပြေစွာ တွက်ချက်နိုင်ပါသည်။
+                    <!-- Precision billing integrated with scales. Perfect for seafood and bulk cargo. -->
+                     ချိန်စက်နဲ့ တိုက်ရိုက်ချိတ်ဆက်ပြီး တိကျစွာ တွက်ချက်ပေးပါတယ်။ ပင်လယ်စာနဲ့ ကုန်စည်ပို့ဆောင်ရေးအတွက် အထူးသင့်လျော်ပါတယ်။
                 </p>
             </div>
 
@@ -73,7 +80,8 @@
                 </div>
                 <h3 class="text-xl font-bold mb-4">Route Management</h3>
                 <p class="text-slate-600 leading-relaxed">
-                    ပို့ဆောင်ရေးအတွက် သက်ဆိုင်ရာ ဆိုင်နာမည်ကို စနစ်အတွင်းမှ ရွေးချယ်သတ်မှတ်နိုင်ပါသည်။
+                    <!-- Dedicated tracking for Yangon–Lashio corridor with live updates. -->
+                     ရန်ကုန်–လားရှိုး လမ်းကြောင်းအတွက် Live Updates များဖြင့် အချိန်နှင့်တစ်ပြေးညီ တိကျစွာ စောင့်ကြည့်နိုင်ပါသည်။
                 </p>
             </div>
 
@@ -82,9 +90,13 @@
                 <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-orange-600 transition">
                     <i class="fa-solid fa-bolt text-2xl text-orange-600 group-hover:text-white"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-4">Fast Digital Billing</h3>
+                <!-- <h3 class="text-xl font-bold mb-4">Fast Digital Billing</h3>
                 <p class="text-slate-600 leading-relaxed">
-                    ငွေကြေးတွက်ချက်မှုကို အချိန်မီနှင့် ထိရောက်စွာ လုပ်ဆောင်နိုင်ပါသည်။
+                    Generate invoices instantly and reduce waiting time.
+                </p> -->
+                <h3 class="text-xl font-bold mb-4">Trust</h3>
+                <p class="text-slate-600 leading-relaxed">
+                    admin နှင့် users ကြားတစ်ဦးနဲ့တစ်ဦး ယုံကြည်မှု ရှိစေရန် နှင့် အချိန်ကုန်သက်သာစေရန် ရည်ရွယ်ပါသည်။
                 </p>
             </div>
         </div>
@@ -107,13 +119,17 @@
                     </li>
                     <li class="flex items-center gap-3 text-slate-300">
                         <span class="w-6 h-6 bg-indigo-500 rounded-full flex items-center justify-center text-white text-xs">✓</span>
-                        ပြီးနောက် ထည့်သွင်းပြီးအချက်လက်များကိုပြန်လည်စစ်ဆေး
+                        ပြီးနောက် ထည့်သွင်းပြီးအချက်လက်များကိုပြန်လည်စစ်ဆေးပါ
                     </li>
                     <li class="flex items-center gap-3 text-slate-300">
                         <span class="w-6 h-6 bg-indigo-500 rounded-full flex items-center justify-center text-white text-xs">✓</span>
                         မှားယွင်းမှုရှိပါက ပြန်လည်ပြင်ဆင်နိုင်သည်
                     </li>
                 </ul>
+
+                <!--<a href="#" class="inline-block mt-8 text-indigo-400 font-bold border-b-2 border-indigo-400 hover:text-indigo-300">
+                    Learn More About Security →
+                </a>-->
             </div>
 
             <div class="md:w-1/2 rounded-3xl overflow-hidden shadow-2xl">

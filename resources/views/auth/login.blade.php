@@ -53,9 +53,9 @@ User Login Form
                 <div class="flex items-center">
                     <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}
                         class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                    <label for="remember" class="ml-2 text-stone-600">Remember me</label>
+                    <label for="remember" class="ml-2 text-stone-600">အကောင့်လက်ခံထားမယ်</label>
                 </div>
-                <a href="{{ route('user.forgot-password') }}" class="text-indigo-500 hover:underline">စကားဝှက်မေ့နေပါသလား?</a>
+                <a href="{{ route('user.forgot-password') }}" class="text-indigo-500 hover:underline">စကားဝှက်မေ့နေသလား?</a>
             </div>
 
             <div class="pt-2">
@@ -70,11 +70,11 @@ User Login Form
 
         <p class="text-center text-stone-500 text-sm font-medium">
             အကောင့်မရှိဘူးလား?
-            <a href="{{ route('user.register') }}" class="text-indigo-500 font-bold hover:underline">အကောင့်ဖွင့်ရန်</a>
+            <a href="{{ route('user.register') }}" class="text-indigo-500 font-bold hover:underline">မှတ်ပုံတင်ပါ</a>
         </p>
     </div>
 </section>
-{{-- <div class="container mt-5">
+<!-- <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
             @session('success')
@@ -123,6 +123,6 @@ User Login Form
             </form>
         </div>
     </div>
-</div> --}}
+</div> -->
 <!--login css-->
 @endsection

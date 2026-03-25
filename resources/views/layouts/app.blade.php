@@ -22,17 +22,15 @@
 
 <body>
     <div id="app" class="d-flex flex-column min-vh-100">
-        <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-20 items-center">
-                    {{-- Logo --}}
-                    <a href="{{ url('/home') }}" class="flex items-center gap-3">
-                        <img class="h-10" src="{{ asset('images/logo1.png') }}" alt="Logo">
-                        <h1 class="text-xl font-bold italic">
-                            <span class="text-green-600">Shipping</span>
-                            <span class="text-indigo-600">Record</span>
-                        </h1>
-                    </a>
+        <header class="sticky top-0 z-50 h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 w-full px-6 md:px-18 flex items-center justify-between">
+            {{-- Logo --}}
+            <div class="flex items-center gap-3">
+                <img src="{{ asset('images/logo1.png') }}" alt="" class="h-10">
+                <a  href="{{ url('/home') }}" class="h1 text-xl font-bold italic">
+                    <span class="text-green-600">Shipping</span>
+                    <span class="text-indigo-600">Record</span>
+                </a>
+            </div>
 
                     {{-- Desktop Menu --}}
                     <nav class="hidden md:flex space-x-6 items-center font-medium text-gray-600">
@@ -80,13 +78,22 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                                     </svg>
                                 </button>
-                                <div x-show="open" x-transition class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50" style="display: none;">
-                                    <a href="{{ url('change-password') }}" class="block px-4 py-2 text-gray-600 hover:bg-indigo-50 text-sm">စကားဝှက်ပြောင်းရန်</a>
-                                    <hr class="my-1 border-gray-100">
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-                                        <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 text-sm font-bold">ထွက်ရန်</button>
-                                    </form>
+
+                                {{-- Dropdown Menu --}}
+                                <div x-show="open"
+                                    x-transition:enter="transition ease-out duration-150"
+                                    x-transition:enter-start="opacity-0 translate-y-2"
+                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                    class="absolute left-0 top-[85%] w-56 bg-white shadow-2xl rounded-2xl border border-slate-100 py-2 z-[100]"
+                                    style="display: none;">
+
+                                    {{-- No more discs/dots here --}}
+                                    <a href="{{ url('/categories') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">ကုန်ပစ္စည်းအမျိုးအစားများ</a>
+                                    <a href="{{ url('/products') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">ကုန်အမည်များ</a>
+                                    <a href="{{ url('/sourceareas') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">ပွဲရုံများ</a>
+                                    <a href="{{ url('/gates') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">တင်ပို့ဂိတ်များ</a>
+                                    <a href="{{ url('/shops') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">ဆိုင်များ</a>
+                                    <a href="{{ url('/units') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">အသုံးပြုသော ယူနစ်များ</a>
                                 </div>
                             </div>
                         @endguest
@@ -169,6 +176,7 @@
                                     <li><a class="dropdown-item text-success fw-bold" href="{{ url('/sourceareas') }}">ပွဲရုံများ</a></li>
                                     <li><a class="dropdown-item text-success fw-bold" href="{{ url('/gates') }}">တင်ပို့ဂိတ်များ</a></li>
                                     <li><a class="dropdown-item text-success fw-bold" href="{{ url('/shops') }}">ဆိုင်များ</a></li>
+                                    <li><a class="dropdown-item text-success fw-bold" href="{{ url('/shops') }}">အသုံးပြုသော ယူနစ်များ</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -229,29 +237,31 @@
                     </p>
                 </div>
                 <div>
-                    <h4 class="font-bold mb-4">Product</h4>
+                    <h4 class="font-bold mb-4">Products</h4>
                     <ul class="text-slate-500 space-y-2">
-                        <li>Features</li>
+                        <!-- <li>Features</li>
                         <li>Pricing</li>
-                        <li>Integrations</li>
+                        <li>Integrations</li> -->
+                        <li>ငါးခြောက်</li>
+                        <li>ပုစွန်ခြောက်</li>
+                        <li>ငါးပိ</li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-bold mb-4">Support</h4>
                     <ul class="text-slate-500 space-y-2">
-                        <li>Help Center</li>
-                        <li>Contact Us</li>
-                        <li>Terms of Service</li>
+                        <li>ကုန်စည်တင်ပို့ခြင်း</li>
                     </ul>
                 </div>
             </div>
-            <div class="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-center items-center gap-4">
                 <p class="text-slate-400 text-sm">2026 &copy; Yangon–Lashio Shipping Record System. All rights reserved.</p>
                 <div class="flex gap-6 grayscale opacity-50">
                     </div>
             </div>
         </div>
     </footer>
+    <script src="//unpkg.com/alpinejs" defer></script>
 </body>
 
 </html>
