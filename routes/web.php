@@ -23,9 +23,7 @@ use App\Http\Controllers\HomeController;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return view('userole');
-});
+Route::get('/', fn () => view('userole'));
 
 Route::get('/role', fn () => view('userole'));
 
@@ -37,16 +35,21 @@ Route::post('/role', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Auth Routes
+| Auth Routes (Laravel Default)
 |--------------------------------------------------------------------------
 */
 
 Auth::routes();
 
+/*
+|--------------------------------------------------------------------------
+| Custom Guest Routes
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware('guest')->group(function () {
     Route::get('/user/login', [LoginController::class, 'userLoginForm'])->name('user.login');
     Route::get('/admin/login', [LoginController::class, 'adminLoginForm'])->name('admin.login');
-
     Route::get('/user/register', [RegisterController::class, 'registerForm'])->name('user.register');
 });
 
@@ -90,7 +93,7 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Master Data (Category, Product, etc.)
+    | Master Data
     |--------------------------------------------------------------------------
     */
 
@@ -114,17 +117,25 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | User Settings
+    | User Settings (FIXED ✅)
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/change-password', [UserController::class, 'showChangePasswordForm'])->name('password.form');
-    Route::post('/change-password', [UserController::class, 'changePassword'])->name('password.update');
+    Route::get('/change-password', [UserController::class, 'showChangePasswordForm'])
+        ->name('user.password.form');
 
-    Route::get('/forgot-password', [UserController::class, 'showForgotPasswordForm'])->name('user.forgot-password');
+    Route::post('/change-password', [UserController::class, 'changePassword'])
+        ->name('user.password.update');
+
+    Route::get('/forgot-password', [UserController::class, 'showForgotPasswordForm'])
+        ->name('user.forgot-password');
+
     Route::post('/forgot-password', [UserController::class, 'forgotPassword']);
 
-    Route::get('/reset-password', [UserController::class, 'showResetPasswordForm'])->name('user.reset-password.form');
-    Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('user.reset-password');
+    Route::get('/reset-password', [UserController::class, 'showResetPasswordForm'])
+        ->name('user.reset-password.form');
+
+    Route::post('/reset-password', [UserController::class, 'resetPassword'])
+        ->name('user.reset-password');
 
 });
