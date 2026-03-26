@@ -1,38 +1,43 @@
-<!-- Make sure Alpine.js is loaded in your layout -->
-<div class="max-w-md mx-auto text-center my-6 md:my-12" x-data="{ open: false }">
-    <!-- Dropdown Button -->
-    <button 
-        @click="open = !open" 
+<div class="relative w-full" x-data="{ open: false }">
+    <button
+        @click="open = !open"
         type="button"
-        class="px-4 py-2 w-full border border-green-500 text-green-600 font-medium rounded-md shadow-sm hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 flex justify-between items-center">
-        {{ isset($currentStatus) ? $currentStatus : 'Filter By Status' }}
-        <svg class="w-4 h-4 ml-2 transition-transform duration-200" :class="{'rotate-180': open}" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.584l3.71-4.354a.75.75 0 111.14.976l-4 4.688a.75.75 0 01-1.14 0l-4-4.688a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-        </svg>
+        class="w-full bg-slate-50 border border-slate-200 text-slate-700 font-bold py-3 px-4 rounded-xl flex justify-between items-center hover:bg-white hover:border-indigo-400 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+
+        <span class="text-sm truncate">
+            <i class="fa-solid fa-filter mr-2 text-slate-400 text-xs"></i>
+            {{ request('status') ?: 'Filter By Status' }}
+        </span>
+
+        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200" :class="open ? 'rotate-180' : ''"></i>
     </button>
 
-    <!-- Dropdown Menu -->
-    <ul 
-        x-show="open" 
-        x-transition
+    <ul
+        x-show="open"
+        x-cloak
+        style="display: none;"
         @click.outside="open = false"
-        class="mt-2 bg-white border border-gray-200 rounded-md shadow-lg absolute z-50">
-        
+        class="absolute left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-[110] max-h-60 overflow-y-auto py-1 px-0">
+
+        <li>
+            <a href="{{ auth()->user()->role_id == 2 ? url('/orders') : url('/user/'.auth()->id().'/orders') }}"
+               class="w-full block px-4 py-2.5 text-xs font-bold text-indigo-600 hover:bg-indigo-50 border-b border-slate-50">
+                <i class="fa-solid fa-rotate-left mr-2"></i>အားလုံးကြည့်ရန်
+            </a>
+        </li>
+
         @foreach($statuses as $status)
         <li>
-            @if(auth()->user()->role_id == 2)
-            <a 
-                href="/orders/?status={{$status}}{{request('shop')?'&shop='.request('shop'):''}}{{request('from_date')?'&from_date='.request('from_date'):''}}{{request('to_date')?'&to_date='.request('to_date'):''}}{{request('nameunit')?'&nameunit='.request('nameunit'):''}}"
-                class="block px-4 py-2 text-gray-700 hover:bg-green-100 hover:text-green-700">
+            @php
+                $baseUrl = auth()->user()->role_id == 2 ? '/orders' : '/user/'.auth()->id().'/orders';
+                $params = request()->all();
+                $params['status'] = $status;
+                $url = $baseUrl . '?' . http_build_query($params);
+            @endphp
+            <a href="{{ $url }}"
+                class="w-full block px-4 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
                 {{ $status }}
             </a>
-            @elseif(auth()->user()->role_id == 1)
-            <a 
-                href="/user/{{auth()->id()}}/orders/?status={{$status}}{{request('shop')?'&shop='.request('shop'):''}}{{request('from_date')?'&from_date='.request('from_date'):''}}{{request('to_date')?'&to_date='.request('to_date'):''}}{{request('nameunit')?'&nameunit='.request('nameunit'):''}}"
-                class="block px-4 py-2 text-gray-700 hover:bg-green-100 hover:text-green-700">
-                {{ $status }}
-            </a>
-            @endif
         </li>
         @endforeach
     </ul>

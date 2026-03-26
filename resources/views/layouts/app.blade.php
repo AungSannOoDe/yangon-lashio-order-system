@@ -1,267 +1,176 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Shipping Record System</title>
     <link rel="icon" href="{{ asset('images/logo1.png') }}" type="image/png">
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=nunito:400,600,700" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.15.4/dist/cdn.min.js"></script>
-    <!-- Scripts -->
+
+    <style>
+        [x-cloak] { display: none !important; }
+        .nav-link-custom { @apply hover:text-indigo-600 transition-colors font-semibold text-slate-600; }
+        .mobile-link {
+            display: block;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 10px;
+            font-weight: 700;
+            color: #334155;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body>
-    <div id="app" class="d-flex flex-column min-vh-100">
-        <header class="sticky top-0 z-50 h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 w-full px-6 md:px-18 flex items-center justify-between">
-            {{-- Logo --}}
-            <div class="flex items-center gap-3">
-                <img src="{{ asset('images/logo1.png') }}" alt="" class="h-10">
-                <a  href="{{ url('/home') }}" class="h1 text-xl font-bold italic">
-                    <span class="text-green-600">Shipping</span>
-                    <span class="text-indigo-600">Record</span>
-                </a>
-            </div>
+<body class="bg-slate-50 font-['Nunito'] antialiased text-slate-900">
+<div id="app" class="flex flex-col min-h-screen" x-data="{ mobileOpen: false }">
 
-                    {{-- Desktop Menu --}}
-                    <nav class="hidden md:flex space-x-6 items-center font-medium text-gray-600">
-                        @auth
-                            @if(auth()->user()->role_id == 1)
-                                <a href="{{ url('/order/add') }}" class="hover:text-indigo-600 transition">တင်ပို့ကုန်ထည့်သွင်းရန်</a>
-                                <a href="{{ url('/user/'.auth()->user()->id.'/orders') }}" class="hover:text-indigo-600 transition">အချက်လက်ကြည့်ရန်</a>
-                            @endif
+    <header class="sticky top-0 z-[100] h-20 bg-white border-b border-slate-200 px-6 md:px-12 flex items-center justify-between">
 
-                            @if(auth()->user()->role_id == 2)
-                                <a href="{{ url('/orders') }}" class="hover:text-indigo-600 transition">ပို့ကုန်စာရင်းကြည့်ရန်</a>
-                                <a href="{{ url('/facts/add') }}" class="hover:text-indigo-600 transition">အချက်လက်ထည့်သွင်းရန်</a>
-
-                                {{-- Dropdown --}}
-                                <div class="relative" x-data="{ open: false }">
-                                    <button @mouseenter="open = true" @mouseleave="open = false" class="flex items-center gap-1 hover:text-indigo-600 transition">
-                                        အချက်အလက်ကြည့်ရန်
-                                        <svg :class="open ? 'rotate-180' : ''" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                    </button>
-                                    <div x-show="open" @mouseenter="open = true" @mouseleave="open = false"
-                                         x-transition class="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50 hidden md:block">
-                                        <a href="{{ url('/categories') }}" class="block px-4 py-2 hover:bg-indigo-50 hover:text-indigo-600 text-sm">ကုန်ပစ္စည်းအမျိုးအစားများ</a>
-                                        <a href="{{ url('/products') }}" class="block px-4 py-2 hover:bg-indigo-50 hover:text-indigo-600 text-sm">ကုန်အမည်များ</a>
-                                        <a href="{{ url('/sourceareas') }}" class="block px-4 py-2 hover:bg-indigo-50 hover:text-indigo-600 text-sm">ပွဲရုံများ</a>
-                                        <a href="{{ url('/gates') }}" class="block px-4 py-2 hover:bg-indigo-50 hover:text-indigo-600 text-sm">တင်ပို့ဂိတ်များ</a>
-                                        <a href="{{ url('/shops') }}" class="block px-4 py-2 hover:bg-indigo-50 hover:text-indigo-600 text-sm">ဆိုင်များ</a>
-                                    </div>
-                                </div>
-                            @endif
-                        @endauth
-                    </nav>
-
-                    {{-- Right Side / Login / User --}}
-                    <div class="flex items-center gap-4">
-                        @guest
-                            <a href="{{ route('login') }}" class="text-gray-600 hover:text-indigo-600 font-medium transition">Login</a>
-                            <a href="{{ route('register') }}" class="bg-indigo-600 text-white px-5 py-2 rounded-full hover:bg-indigo-700 transition shadow-lg">Register</a>
-                        @else
-                            <div class="relative" x-data="{ open: false }" @click.away="open = false">
-                                <button @click="open = !open" class="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg hover:bg-indigo-50 transition">
-                                    <span class="font-bold text-indigo-600 text-sm">{{ Auth::user()->name }}</span>
-                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                    </svg>
-                                </button>
-
-                                {{-- Dropdown Menu --}}
-                                <div x-show="open"
-                                    x-transition:enter="transition ease-out duration-150"
-                                    x-transition:enter-start="opacity-0 translate-y-2"
-                                    x-transition:enter-end="opacity-100 translate-y-0"
-                                    class="absolute left-0 top-[85%] w-56 bg-white shadow-2xl rounded-2xl border border-slate-100 py-2 z-[100]"
-                                    style="display: none;">
-
-                                    {{-- No more discs/dots here --}}
-                                    <a href="{{ url('/categories') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">ကုန်ပစ္စည်းအမျိုးအစားများ</a>
-                                    <a href="{{ url('/products') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">ကုန်အမည်များ</a>
-                                    <a href="{{ url('/sourceareas') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">ပွဲရုံများ</a>
-                                    <a href="{{ url('/gates') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">တင်ပို့ဂိတ်များ</a>
-                                    <a href="{{ url('/shops') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">ဆိုင်များ</a>
-                                    <a href="{{ url('/units') }}" class="block px-5 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition">အသုံးပြုသော ယူနစ်များ</a>
-                                </div>
-                            </div>
-                        @endguest
-
-                        {{-- Mobile Menu Button --}}
-                        <div class="md:hidden" x-data="{ mobileOpen: false }">
-                            <button @click="mobileOpen = !mobileOpen" class="text-gray-600 focus:outline-none">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path :class="mobileOpen ? 'hidden' : 'inline-flex'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                                    <path :class="mobileOpen ? 'inline-flex' : 'hidden'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                            </button>
-
-                            {{-- Mobile Menu --}}
-                            <div x-show="mobileOpen" x-transition class="absolute top-20 left-0 w-full bg-white shadow-lg border-t border-gray-200 z-40">
-                                <ul class="flex flex-col gap-1 font-medium text-gray-600 p-4">
-                                    @auth
-                                        @if(auth()->user()->role_id == 1)
-                                            <li><a href="{{ url('/order/add') }}" class="block py-2 hover:text-indigo-600">တင်ပို့ကုန်ထည့်သွင်းရန်</a></li>
-                                            <li><a href="{{ url('/user/'.auth()->user()->id.'/orders') }}" class="block py-2 hover:text-indigo-600">အချက်လက်ကြည့်ရန်</a></li>
-                                        @endif
-                                        @if(auth()->user()->role_id == 2)
-                                            <li><a href="{{ url('/orders') }}" class="block py-2 hover:text-indigo-600">ပို့ကုန်စာရင်းကြည့်ရန်</a></li>
-                                            <li><a href="{{ url('/facts/add') }}" class="block py-2 hover:text-indigo-600">အချက်လက်ထည့်သွင်းရန်</a></li>
-                                            <li><a href="{{ url('/categories') }}" class="block py-2 hover:text-indigo-600">ကုန်ပစ္စည်းအမျိုးအစားများ</a></li>
-                                            <li><a href="{{ url('/products') }}" class="block py-2 hover:text-indigo-600">ကုန်အမည်များ</a></li>
-                                            <li><a href="{{ url('/sourceareas') }}" class="block py-2 hover:text-indigo-600">ပွဲရုံများ</a></li>
-                                            <li><a href="{{ url('/gates') }}" class="block py-2 hover:text-indigo-600">တင်ပို့ဂိတ်များ</a></li>
-                                            <li><a href="{{ url('/shops') }}" class="block py-2 hover:text-indigo-600">ဆိုင်များ</a></li>
-                                        @endif
-                                    @endauth
-                                    @guest
-                                        <li><a href="{{ route('login') }}" class="block py-2 hover:text-indigo-600">Login</a></li>
-                                        <li><a href="{{ route('register') }}" class="block py-2 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg mt-1">Register</a></li>
-                                    @endguest
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </header>
-        {{-- <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/home') }}" style="font-style:italic">
-                    <img src="{{ asset('images/logo1.png') }}" alt="" style="max-height:40px;">
-                    <span style="color: green;">Shipping</span><span style="color: #3335e8;">Record</span>
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto ms-md-5">
-                        @if(auth()->user()->role_id == 1)
-                        <li class="mx-md-3 my-3">
-                            <a href="{{ url('/order/add') }}" class="text-decoration-none fw-bold text-success">တင်ပို့ကုန်ထည့်သွင်းရန်</a>
-                        </li>
-                        <li class="mx-md-3 my-3">
-                            <a href="{{ url('/user/'.auth()->user()->id.'/orders') }}" class="text-decoration-none fw-bold text-success">အချက်လက်ကြည့်ရန်</a>
-                        </li>
-                        @endif
-                        @if(auth()->user()->role_id == 2)
-                        <li class="mx-md-3 my-3">
-                            <a href="{{ url('/orders') }}" class="text-decoration-none fw-bold text-success">ပို့ကုန်စာရင်းကြည့်ရန်</a>
-                        </li>
-                        <li class="mx-md-3 my-3">
-                            <a href="{{ url('/facts/add') }}" class="text-decoration-none fw-bold text-success">အချက်လက်ထည့်သွင်းရန်</a>
-                        </li>
-                        <li class="mx-md-3 my-3">
-                            <div class="dropdown">
-                                <a href="#" class="dropdown-toggle text-success text-decoration-none fw-bold" data-bs-toggle="dropdown" aria-expanded="false">
-                                    အချက်အလက်ကြည့်ရန်
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item text-success fw-bold" href="{{ url('/categories') }}">ကုန်ပစ္စည်းအမျိုးအစားများ</a></li>
-                                    <li><a class="dropdown-item text-success fw-bold" href="{{ url('/products') }}">ကုန်အမည်များ</a></li>
-                                    <li><a class="dropdown-item text-success fw-bold" href="{{ url('/sourceareas') }}">ပွဲရုံများ</a></li>
-                                    <li><a class="dropdown-item text-success fw-bold" href="{{ url('/gates') }}">တင်ပို့ဂိတ်များ</a></li>
-                                    <li><a class="dropdown-item text-success fw-bold" href="{{ url('/shops') }}">ဆိုင်များ</a></li>
-                                    <li><a class="dropdown-item text-success fw-bold" href="{{ url('/shops') }}">အသုံးပြုသော ယူနစ်များ</a></li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        @endif
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                        @if (Route::has('login'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                        @endif
-
-                        @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                        @endif
-                        @else
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle fw-bold text-success" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }}
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item fw-bold text-success" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                    ထွက်ရန်
-                                </a>
-
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                                <a href="{{url('change-password')}}" class="dropdown-item fw-bold text-success">စကားဝှက်ပြောင်းရန်</a>
-                            </div>
-                        </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav> --}}
-        <main class="flex-grow-1 py-4">
-            @yield('content')
-        </main>
-    </div>
-    <footer class="bg-white border-t border-slate-200 pt-20 pb-10 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-                <div class="md:col-span-2 space-y-6">
-                    <h3 class="text-2xl font-bold">Yangon–Lashio Shipping</h3>
-                    <p class="text-slate-500 max-w-sm leading-relaxed">
-                        ပင်လယ်ထွက်ကုန်များကို စနစ်တကျ တင်ပို့နိုင်ပြီး၊ စာရင်းများကို လွယ်ကူစွာ ကြည့်ရှုနိုင်သည်။
-                    </p>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4">Products</h4>
-                    <ul class="text-slate-500 space-y-2">
-                        <!-- <li>Features</li>
-                        <li>Pricing</li>
-                        <li>Integrations</li> -->
-                        <li>ငါးခြောက်</li>
-                        <li>ပုစွန်ခြောက်</li>
-                        <li>ငါးပိ</li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4">Support</h4>
-                    <ul class="text-slate-500 space-y-2">
-                        <li>ကုန်စည်တင်ပို့ခြင်း</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-center items-center gap-4">
-                <p class="text-slate-400 text-sm">2026 &copy; Yangon–Lashio Shipping Record System. All rights reserved.</p>
-                <div class="flex gap-6 grayscale opacity-50">
-                    </div>
-            </div>
+        <div class="flex items-center gap-3">
+            <img src="{{ asset('images/logo1.png') }}" class="h-10" alt="Logo">
+            <a href="{{ url('/home') }}" class="text-xl font-bold italic tracking-tight">
+                <span class="text-green-600">Shipping</span>
+                <span class="text-indigo-600">Record</span>
+            </a>
         </div>
-    </footer>
-    <script src="//unpkg.com/alpinejs" defer></script>
-</body>
 
+        <nav class="hidden md:flex items-center space-x-8">
+            @auth
+                @if(auth()->user()->role_id == 1)
+                    <a href="{{ url('/order/add') }}" class="nav-link-custom">တင်ပို့ကုန်ထည့်သွင်းရန်</a>
+                    <a href="{{ url('/user/'.auth()->id().'/orders') }}" class="nav-link-custom">အချက်လက်ကြည့်ရန်</a>
+                @endif
+
+                @if(auth()->user()->role_id == 2)
+                    <a href="{{ url('/orders') }}" class="nav-link-custom">ပို့ကုန်စာရင်း</a>
+                    <a href="{{ url('/facts/add') }}" class="nav-link-custom">အချက်လက်ထည့်ရန်</a>
+
+                    <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                        <button class="flex items-center gap-1 py-7 nav-link-custom outline-none">
+                            အချက်အလက်များ
+                            <i class="fas fa-chevron-down text-[10px]"></i>
+                        </button>
+                        <div x-show="open" x-cloak style="display: none;" class="absolute left-0 w-60 bg-white rounded-xl shadow-xl border border-slate-200 py-3 z-50">
+                            <a href="/categories" class="block px-4 py-2 hover:bg-indigo-50 hover:text-indigo-600 text-sm">ကုန်ပစ္စည်းအမျိုးအစားများ</a>
+                            <a href="/products" class="block px-4 py-2 hover:bg-indigo-50 hover:text-indigo-600 text-sm">ကုန်အမည်များ</a>
+                            <a href="/sourceareas" class="block px-4 py-2 hover:bg-indigo-50 hover:text-indigo-600 text-sm">ပွဲရုံများ</a>
+                            <a href="/gates" class="block px-4 py-2 hover:bg-indigo-50 hover:text-indigo-600 text-sm">တင်ပို့ဂိတ်များ</a>
+                            <a href="/shops" class="block px-4 py-2 hover:bg-indigo-50 hover:text-indigo-600 text-sm">ဆိုင်များ</a>
+                            <div class="my-2 border-t border-slate-100"></div>
+                            <a href="/units" class="block px-4 py-2 hover:bg-indigo-50 hover:text-indigo-600 text-sm font-bold">ယူနစ်များ</a>
+                        </div>
+                    </div>
+                @endif
+            @endauth
+        </nav>
+
+        <div class="flex items-center gap-4">
+            @guest
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="{{ route('login') }}" class="font-bold text-slate-600 hover:text-indigo-600">Login</a>
+                    <a href="{{ route('register') }}" class="bg-indigo-600 text-white px-6 py-2 rounded-full font-bold hover:bg-indigo-700 shadow-md">Register</a>
+                </div>
+            @endguest
+
+            @auth
+                <div class="hidden md:block relative" x-data="{ userOpen: false }" @click.away="userOpen = false">
+                    <button @click="userOpen = !userOpen"
+                            class="flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-full hover:bg-indigo-50 border border-slate-200 outline-none">
+                        <div class="w-7 h-7 bg-indigo-600 text-white rounded-full flex items-center justify-center text-xs font-bold">
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        </div>
+                        <span class="text-sm font-bold text-slate-700">{{ Auth::user()->name }}</span>
+                        <i class="fas fa-chevron-down text-[10px] text-slate-400"></i>
+                    </button>
+
+                    <div x-show="userOpen" x-cloak style="display: none;" class="absolute right-0 mt-2 w-56 bg-white shadow-xl rounded-xl border border-slate-200 py-3 z-50">
+                        <a href="/change-password" class="block px-4 py-2 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600">
+                           <i class="fas fa-key mr-2"></i>စကားဝှက်ပြောင်းရန်
+                        </a>
+                        <div class="my-2 border-t border-slate-100"></div>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="px-4 py-2 hover:bg-red-50 text-sm text-red-600 font-bold w-full text-left">
+                                <i class="fas fa-sign-out-alt mr-2"></i>ထွက်ရန်
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @endauth
+
+            <button @click="mobileOpen = !mobileOpen" class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
+                <i class="fas" :class="mobileOpen ? 'fa-times text-xl' : 'fa-bars text-xl'"></i>
+            </button>
+        </div>
+    </header>
+
+    <div x-show="mobileOpen" x-cloak style="display: none;"
+         class="fixed inset-0 top-20 bg-white z-[90] md:hidden p-6 overflow-y-auto space-y-4">
+
+        @auth
+            <div class="flex items-center gap-3 p-4 bg-indigo-50 rounded-2xl mb-4">
+                <div class="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold">
+                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                </div>
+                <div>
+                    <p class="text-xs text-indigo-400 font-bold uppercase tracking-widest">Logged in as</p>
+                    <p class="font-bold text-slate-800">{{ Auth::user()->name }}</p>
+                </div>
+            </div>
+
+            @if(auth()->user()->role_id == 1)
+                <a href="/order/add" class="mobile-link">တင်ပို့ကုန်ထည့်ရန်</a>
+                <a href="{{ url('/user/'.auth()->id().'/orders') }}" class="mobile-link">အချက်လက်ကြည့်ရန်</a>
+            @else
+                <a href="/orders" class="mobile-link">ပို့ကုန်စာရင်းများ</a>
+                <a href="/order/add" class="mobile-link">တင်ပို့ကုန်ထည့်ရန်</a>
+                <div class="grid grid-cols-2 gap-2 mt-2">
+                    <a href="/categories" class="mobile-link">အမျိုးအစား</a>
+                    <a href="/products" class="mobile-link">ကုန်အမည်</a>
+                    <a href="/sourceareas" class="mobile-link">ပွဲရုံများ</a>
+                    <a href="/gates" class="mobile-link">ဂိတ်များ</a>
+                    <a href="/shops" class="mobile-link">ဆိုင်များ</a>
+                    <a href="/units" class="mobile-link">ယူနစ်များ</a>
+                </div>
+            @endif
+
+            <div class="pt-4 border-t border-slate-100 space-y-2">
+                <a href="/change-password" class="mobile-link bg-slate-50">
+                    <i class="fas fa-key mr-2"></i>စကားဝှက်ပြောင်းရန်
+                </a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button class="mobile-link bg-red-50 text-red-600 w-full">
+                        <i class="fas fa-sign-out-alt mr-2"></i>ထွက်ရန်
+                    </button>
+                </form>
+            </div>
+        @endauth
+
+        @guest
+            <a href="{{ route('login') }}" class="mobile-link">Login</a>
+            <a href="{{ route('register') }}" class="mobile-link bg-indigo-600 text-white">Register</a>
+        @endguest
+    </div>
+
+    <main class="flex-grow">
+        @yield('content')
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-6 px-6 text-center">
+        <p class="text-xs text-slate-400">© 2026 Yangon–Lashio Shipping Record System.</p>
+    </footer>
+
+</div>
+</body>
 </html>
