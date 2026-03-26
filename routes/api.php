@@ -7,5 +7,6 @@ use App\Http\Controllers\ProductController;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+Route::get('product',[ProductController::class,'findByCategoryId']);
 Route::get('/products/{id}', [ProductController::class, 'findByCategoryId']);
 Route::get('/products', [ProductController::class, 'index']);
