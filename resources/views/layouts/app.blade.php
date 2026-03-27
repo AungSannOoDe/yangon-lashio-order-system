@@ -4,14 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>Shipping Record System</title>
     <link rel="icon" href="{{ asset('images/logo1.png') }}" type="image/png">
-
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=nunito:400,600,700" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
     <style>
         [x-cloak] { display: none !important; }
         .nav-link-custom { @apply hover:text-indigo-600 transition-colors font-semibold text-slate-600; }
@@ -132,16 +129,34 @@
                 <a href="/order/add" class="mobile-link">တင်ပို့ကုန်ထည့်ရန်</a>
                 <a href="{{ url('/user/'.auth()->id().'/orders') }}" class="mobile-link">အချက်လက်ကြည့်ရန်</a>
             @else
-                <a href="/orders" class="mobile-link">ပို့ကုန်စာရင်းများ</a>
-                <a href="/order/add" class="mobile-link">တင်ပို့ကုန်ထည့်ရန်</a>
-                <div class="grid grid-cols-2 gap-2 mt-2">
-                    <a href="/categories" class="mobile-link">အမျိုးအစား</a>
-                    <a href="/products" class="mobile-link">ကုန်အမည်</a>
+
+            <a href="{{ url('/orders') }}" class="mobile-link  w-full ">ပို့ကုန်စာရင်း</a>
+            <a href="{{ url('/facts/add') }}" class=" mobile-link  w-full">အချက်လက်ထည့်ရန်</a>
+
+            <!-- Mobile Dropdown -->
+            <div x-data="{ open: false }" class="space-y-2 ">
+
+                <button @click="open = !open"
+                    class="mobile-link flex justify-between w-full items-center">
+                    အချက်အလက်များ
+                    <i class="fas fa-chevron-down transition-transform duration-300"
+                       :class="{ 'rotate-180': open }"></i>
+                </button>
+
+                <!-- Dropdown Content -->
+                <div x-show="open"
+                     x-transition
+                     class="space-y-2 pl-2">
+
+                    <a href="/categories" class="mobile-link">ကုန်ပစ္စည်းအမျိုးအစားများ</a>
+                    <a href="/products" class="mobile-link">ကုန်အမည်များ</a>
                     <a href="/sourceareas" class="mobile-link">ပွဲရုံများ</a>
-                    <a href="/gates" class="mobile-link">ဂိတ်များ</a>
+                    <a href="/gates" class="mobile-link">တင်ပို့ဂိတ်များ</a>
                     <a href="/shops" class="mobile-link">ဆိုင်များ</a>
-                    <a href="/units" class="mobile-link">ယူနစ်များ</a>
+                    <a href="/units" class="mobile-link bg-indigo-50 text-indigo-600 font-bold">ယူနစ်များ</a>
+
                 </div>
+            </div>
             @endif
 
             <div class="pt-4 border-t border-slate-100 space-y-2">

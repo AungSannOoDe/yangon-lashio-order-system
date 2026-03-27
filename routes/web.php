@@ -87,7 +87,7 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/facts/create', [FactController::class, 'showFactForms'])->name('facts.create');
+    Route::get('/facts/add', [FactController::class, 'showFactForms']);
     Route::post('/facts/{id}', [FactController::class, 'edit'])->name('facts.update');
     Route::delete('/facts/{id}', [FactController::class, 'delete'])->name('facts.delete');
 
