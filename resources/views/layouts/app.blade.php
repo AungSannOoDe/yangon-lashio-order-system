@@ -10,6 +10,12 @@
     <link href="https://fonts.bunny.net/css?family=nunito:400,600,700" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <style>
+        a,
+        a:hover,
+        a:focus,
+        a:active {
+            text-decoration: none !important;
+        }
         [x-cloak] { display: none !important; }
         .nav-link-custom { @apply hover:text-indigo-600 transition-colors font-semibold text-slate-600; }
         .mobile-link {
@@ -28,7 +34,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body class="bg-slate-50 font-['Nunito'] antialiased text-slate-900">
+<body class="bg-slate-50 font-['Nunito'] antialiased text-slate-900 [&_a]:no-underline">
 <div id="app" class="flex flex-col min-h-screen" x-data="{ mobileOpen: false }">
 
     <header class="sticky top-0 z-[100] h-20 bg-white border-b border-slate-200 px-6 md:px-12 flex items-center justify-between">
@@ -36,21 +42,21 @@
         <div class="flex items-center gap-3">
             <img src="{{ asset('images/logo1.png') }}" class="h-10" alt="Logo">
             <a href="{{ url('/home') }}" class="text-xl font-bold italic tracking-tight">
-                <span class="text-green-600">Shipping</span>
-                <span class="text-indigo-600">Record</span>
+                <span class="text-green-600 no-underline">Shipping</span>
+                <span class="text-indigo-600 no-underline">Record</span>
             </a>
         </div>
 
         <nav class="hidden md:flex items-center space-x-8">
             @auth
                 @if(auth()->user()->role_id == 1)
-                    <a href="{{ url('/order/add') }}" class="nav-link-custom">တင်ပို့ကုန်ထည့်သွင်းရန်</a>
-                    <a href="{{ url('/user/'.auth()->id().'/orders') }}" class="nav-link-custom">အချက်လက်ကြည့်ရန်</a>
+                    <a href="{{ url('/order/add') }}" class="nav-link-custom no-underline">တင်ပို့ကုန်ထည့်သွင်းရန်</a>
+                    <a href="{{ url('/user/'.auth()->id().'/orders') }}" class="nav-link-custom no-underline">အချက်လက်ကြည့်ရန်</a>
                 @endif
 
                 @if(auth()->user()->role_id == 2)
-                    <a href="{{ url('/orders') }}" class="nav-link-custom">ပို့ကုန်စာရင်း</a>
-                    <a href="{{ url('/facts/add') }}" class="nav-link-custom">အချက်လက်ထည့်ရန်</a>
+                    <a href="{{ url('/orders') }}" class="nav-link-custom no-underline">ပို့ကုန်စာရင်း</a>
+                    <a href="{{ url('/facts/add') }}" class="nav-link-custom no-underline">အချက်လက်ထည့်ရန်</a>
 
                     <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
                         <button class="flex items-center gap-1 py-7 nav-link-custom outline-none">
@@ -74,8 +80,8 @@
         <div class="flex items-center gap-4">
             @guest
                 <div class="hidden md:flex items-center gap-6">
-                    <a href="{{ route('login') }}" class="font-bold text-slate-600 hover:text-indigo-600">Login</a>
-                    <a href="{{ route('register') }}" class="bg-indigo-600 text-white px-6 py-2 rounded-full font-bold hover:bg-indigo-700 shadow-md">Register</a>
+                    <a href="{{ route('login') }}" class=" no-underline font-bold text-slate-600 hover:text-indigo-600">Login</a>
+                    <a href="{{ route('register') }}" class="no-underline bg-indigo-600 text-white px-6 py-2 rounded-full font-bold hover:bg-indigo-700 shadow-md">Register</a>
                 </div>
             @endguest
 
@@ -127,7 +133,7 @@
 
             @if(auth()->user()->role_id == 1)
                 <a href="/order/add" class="mobile-link">တင်ပို့ကုန်ထည့်ရန်</a>
-                <a href="{{ url('/user/'.auth()->id().'/orders') }}" class="mobile-link">အချက်လက်ကြည့်ရန်</a>
+                <a href="{{ url('/user/'.auth()->id().'/orders') }}" class="mobile-link no-underline">အချက်လက်ကြည့်ရန်</a>
             @else
 
             <a href="{{ url('/orders') }}" class="mobile-link  w-full ">ပို့ကုန်စာရင်း</a>
