@@ -32,7 +32,7 @@
         </div>
         @endif
 
-        <form class="p-6 sm:p-8" action="{{ url('order/add') }}" method="POST">
+        <form class="p-6 sm:p-8" action="{{ route('orders.store') }}" method="POST">
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-6 gap-x-6 gap-y-5">
