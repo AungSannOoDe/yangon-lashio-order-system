@@ -9,7 +9,7 @@
           <h1 class="text-2xl md:text-4xl font-semibold text-center text-stone-800">အသုံးပြုသူအဆင့်‌‌သတ်မှတ်ပါ</h1>
          <form action="{{ route('role') }}" class=" space-y-7"  method="post" >
         @csrf
-          <div class="grid grid-cols-2 gap-6 md:gap-10 max-w-4xl mx-auto w-full">
+          <div class="grid  grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 max-w-4xl mx-auto w-full">
 
               <div class="selection-card user admin active:bg-indigo-400 duration-200">
                   <div class="card-icon">
