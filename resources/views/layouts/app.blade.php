@@ -50,7 +50,7 @@
         <nav class="hidden md:flex items-center space-x-8">
             @auth
                 @if(auth()->user()->role_id == 1)
-                    <a href="{{ url('/order/add') }}" class="nav-link-custom no-underline">တင်ပို့ကုန်ထည့်သွင်းရန်</a>
+                    <a href="{{ url('/orders/create') }}" class="nav-link-custom no-underline">တင်ပို့ကုန်ထည့်သွင်းရန်</a>
                     <a href="{{ url('/user/'.auth()->id().'/orders') }}" class="nav-link-custom no-underline">အချက်လက်ကြည့်ရန်</a>
                 @endif
 
@@ -132,7 +132,7 @@
             </div>
 
             @if(auth()->user()->role_id == 1)
-                <a href="/order/add" class="mobile-link">တင်ပို့ကုန်ထည့်ရန်</a>
+                <a href="/orders/create" class="mobile-link">တင်ပို့ကုန်ထည့်ရန်</a>
                 <a href="{{ url('/user/'.auth()->id().'/orders') }}" class="mobile-link no-underline">အချက်လက်ကြည့်ရန်</a>
             @else
 
