@@ -88,7 +88,12 @@
             <x-orderCard :order="$order" :shops="$shops" />
         @empty
             <div class="bg-white rounded-3xl p-12 text-center">
+                <div class="relative mb-6">
+                    <div class="absolute inset-0 bg-indigo-100 rounded-full blur-3xl opacity-30"></div>
+                    <img src="{{ asset('images/empty.gif') }}" alt="empty" class="relative w-64 mix-blend-multiply">
+                </div>
                 <h3 class="text-lg font-bold text-slate-700">မှတ်တမ်းများမရှိသေးပါ</h3>
+
             </div>
         @endforelse
     </div>

@@ -53,9 +53,9 @@ User Login Form
                 <div class="flex items-center">
                     <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}
                         class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                    <label for="remember" class="ml-2 text-stone-600">အကောင့်လက်ခံထားမယ်</label>
+                    <label for="remember" class="ml-2 text-stone-600  md:text-balance text-xs">အကောင့်လက်ခံထားမယ်</label>
                 </div>
-                <a href="{{ route('user.forgot-password') }}" class="text-indigo-500 hover:underline">စကားဝှက်မေ့နေသလား?</a>
+                <a href="{{ route('user.forgot-password') }}" class="text-indigo-500 hover:underline md:text-balance text-xs">စကားဝှက်မေ့နေသလား?</a>
             </div>
 
             <div class="pt-2">

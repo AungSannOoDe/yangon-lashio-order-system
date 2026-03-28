@@ -18,10 +18,13 @@
         </div>
     @endif
     @if($shops->isEmpty())
-    <div class="empty text-center">
-        <img src="{{ asset('images/empty.gif') }}" alt="empty" style="max-width:250px;">
+    <div class="bg-white rounded-3xl p-12 text-center">
+        <div class="relative mb-6">
+            <div class="absolute inset-0 bg-indigo-100 rounded-full blur-3xl opacity-30"></div>
+            <img src="{{ asset('images/empty.gif') }}" alt="empty" class="relative w-64 mix-blend-multiply">
+        </div>
+        <p class="text-center fs-5">လက်တလောလွှဲပြောင်းဆိုင်များမရှိသေးပါ</p>
     </div>
-    <p class="text-center fs-5">လက်တလောလွှဲပြောင်းဆိုင်များမရှိသေးပါ</p>
     @else
     {{-- Header Section --}}
     <div class="mb-10 text-center">
