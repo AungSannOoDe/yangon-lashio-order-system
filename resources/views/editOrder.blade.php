@@ -167,7 +167,7 @@
                     <i class="fa-regular fa-floppy-disk"></i> သိမ်းမည်
                 </button>
                 <a href="{{ url('/user/'.auth()->user()->id.'/orders') }}" 
-                    class="w-full block mt-3 text-center text-white bg-[#50d71e] font-bold py-3 px-6 rounded-md">
+                    class="w-full block mt-3 text-center text-white bg-[#e92e4a] font-bold py-3 px-6 rounded-md">
                     <i class="fa-solid fa-xmark"></i> ပယ်ဖျက်မည်
                 </a>
             </div>
