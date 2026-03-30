@@ -43,13 +43,13 @@
             @if(auth()->user()->role_id == 2)
                 <div>
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">တင်ပို့သူအမည်</p>
-                    <p class="text-slate-900 font-semibold truncate">{{ $order->user->name }}</p>
-                    <p class="text-indigo-500 text-xs font-medium">{{ $order->user->phone }}</p>
+                    <p class="text-slate-900 font-semibold truncate">{{ $order->user?->name }}</p>
+                    <p class="text-indigo-500 text-xs font-medium">{{ $order->user?->phone }}</p>
                 </div>
             @endif
             <div>
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">ကုန်အမျိုးအစား</p>
-                <p class="text-slate-700 font-semibold">{{ $order->category->name }}</p>
+                <p class="text-slate-700 font-semibold">{{ $order->category?->name }}</p>
             </div>
             <div>
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">ပစ္စည်းအမည်</p>
@@ -57,7 +57,7 @@
             </div>
             <div>
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">ပွဲရုံအမည်</p>
-                <p class="text-slate-700 font-semibold">{{ $order->sourceArea->name }}</p>
+                <p class="text-slate-700 font-semibold">{{ $order->sourceArea?->name }}</p>
             </div>
         </div>
 
