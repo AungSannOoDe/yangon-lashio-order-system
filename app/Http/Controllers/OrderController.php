@@ -72,24 +72,39 @@ class OrderController extends Controller
         $orders = Order::query()
             ->orderBy('status', 'asc')
             ->orderBy('created_at', 'desc')
-            ->filter(request(['shop','status', 'from_date', 'to_date', 'nameunit']))
+            ->filter(request(['shop', 'status', 'from_date', 'to_date', 'nameunit']))
             ->simplePaginate(5)
             ->withQueryString(); // Keeps filters active when clicking 'Next/Previous'
+
+        $exportOrders = Order::query()
+            ->with(['user', 'sourceArea', 'category', 'unit', 'gate', 'shop'])
+            ->orderBy('status', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->filter(request(['shop', 'status', 'from_date', 'to_date', 'nameunit']))
+            ->get();
+
         $shops = Shop::latest()->get();
 
-        return view('orders', compact('orders', 'shops'));
+        return view('orders', compact('orders', 'shops', 'exportOrders'));
     }
     public function show($id)
     {
         $orders = Order::where('user_id', $id)
             ->orderBy('status', 'asc')
             ->orderBy('created_at', 'desc')
-            ->filter(request(['shop','status', 'from_date', 'to_date', 'nameunit']))
+            ->filter(request(['shop', 'status', 'from_date', 'to_date', 'nameunit']))
             ->simplePaginate(5)
             ->withQueryString();
 
+        $exportOrders = Order::where('user_id', $id)
+            ->with(['user', 'sourceArea', 'category', 'unit', 'gate', 'shop'])
+            ->orderBy('status', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->filter(request(['shop', 'status', 'from_date', 'to_date', 'nameunit']))
+            ->get();
+
         $shops = Shop::latest()->get();
-        return view('orders', compact('orders', 'shops'));
+        return view('orders', compact('orders', 'shops', 'exportOrders'));
     }
 
     public function edit(Order $order)
@@ -181,34 +196,39 @@ class OrderController extends Controller
             return back()->with('error', 'အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။');
         }
     }
-    public function destroy(Order $order){
-        try{
+    public function destroy(Order $order)
+    {
+        try {
             $order->delete();
-            if(Auth::user()->role_id == 2){
+            if (Auth::user()->role_id == 2) {
                 return redirect('/orders');
-            }else{
-                return redirect('/user/'. Auth::user()->id .'/orders');
+            } else {
+                return redirect('/user/' . Auth::user()->id . '/orders');
             }
-        }catch(\Exception $e){
-            if(Auth::user()->role_id == 2){
+        } catch (\Exception $e) {
+            if (Auth::user()->role_id == 2) {
                 return redirect('/orders')->with('error', 'အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။');
-            }else{
-                return redirect('/user/'. Auth::user()->id .'/orders')->with('error', 'အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။');
+            } else {
+                return redirect('/user/' . Auth::user()->id . '/orders')->with('error', 'အမှားအယွင်းတစ်ခု ဖြစ်နေပါသည်။');
             }
         }
     }
     public function exporting(Request $request)
     {
+        // Decode the base64 encoded JSON string
+        $orders = json_decode(base64_decode($request->exportOrders), true);
 
-        $orders = json_decode(base64_decode($request->orders), true);
-        //dd($orders);
+        // If you used base64_encode(json_encode($exportOrders)) in blade, 
+        // $orders is now a simple sequential array of order data.
+
         if (!$orders || count($orders) == 0) {
             return back()->with('error', 'No orders available for export.');
         }
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        // headings
+        // Headings
         $sheet->fromArray([
             [
                 'Export Date',
@@ -224,54 +244,52 @@ class OrderController extends Controller
                 'Status',
                 'Gate',
                 'Shop',
-                'Weight Fee(တန်ဆာခ)'
+                'Weight Fee'
             ]
         ]);
-        // Make header row bold
+
         $sheet->getStyle('A1:N1')->getFont()->setBold(true);
 
         $row = 2;
+        // REMOVED ['data'] loop because $orders is already the array of records
+        foreach ($orders as $orderData) {
+            // Convert to object for easier access, though array syntax works too
+            $order = (object)$orderData;
 
-        foreach ($orders['data'] as $order) {
-            $order = (object)$order;
             $sheet->fromArray([
                 [
-                    $order->export_date,
-                    $order->user['name'],
-                    $order->source_area['name'],
-                    $order->category['name'],
-                    $order->product_name,
-                    $order->weight,
-                    $order->net_weight,
-                    $order->unit['name'],
-                    $order->price,
-                    $order->total,
-                    $order->status,
-                    $order->gate['name'],
+                    $order->export_date ?? '',
+                    $order->user['name'] ?? '',
+                    $order->source_area['name'] ?? '',
+                    $order->category['name'] ?? '',
+                    $order->product_name ?? '',
+                    $order->weight ?? 0,
+                    $order->net_weight ?? 0,
+                    $order->unit['name'] ?? '',
+                    $order->price ?? 0,
+                    $order->total ?? 0,
+                    $order->status ?? '',
+                    $order->gate['name'] ?? '',
                     $order->shop['name'] ?? '',
-                    $order->weightfee
+                    $order->weightfee ?? 0
                 ]
             ], null, "A{$row}");
 
             $row++;
         }
 
-        // Last data row
         $lastDataRow = $row - 1;
-
-        // Grand Total Row
-        $sheet->setCellValue("I{$row}", 'စုစုပေါင်းအနှစ်ချုပ်ကျသင့်ငွေ (Grand Total)');
+        $sheet->setCellValue("I{$row}", 'Grand Total');
         $sheet->setCellValue("J{$row}", "=SUM(J2:J{$lastDataRow})");
+        $sheet->getStyle("I{$row}:J{$row}")->getFont()->setBold(true);
 
-        // Style total row
-        $sheet->getStyle("I{$row}:J{$row}")
-                ->getFont()
-                ->setBold(true);
-
-        $fileName = 'filtered_orders.xlsx';
+        $fileName = 'orders_export_' . now()->format('Y-m-d') . '.xlsx';
         $writer = new Xlsx($spreadsheet);
-        $writer->save($fileName);
 
-        return response()->download($fileName)->deleteFileAfterSend(true);
+        // Use a temp path to avoid permission issues on some servers
+        $tempFile = tempnam(sys_get_temp_dir(), 'export');
+        $writer->save($tempFile);
+
+        return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
     }
 }

@@ -32,10 +32,14 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'category' => 'required|string',
+            'category' => 'required|string|unique:categories,name',
+        ],
+        [
+            'category.required' => 'ကုန်အမျိုးအစားအမည် ထည့်သွင်းရန် လိုအပ်ပါသည်။',
+            'category.unique' => 'ဤကုန်အမျိုးအစားအမည်မှာ ရှိနှင့်ပြီးသား ဖြစ်ပါသည်။'
         ]);
         if($validator->fails()){
-            return back()->with('error', 'အချက်အလက်မှားယွင်းနေပါသည်');
+            return back()->with('error', $validator->errors()->first());
         }
         try{
             $category = new Category;

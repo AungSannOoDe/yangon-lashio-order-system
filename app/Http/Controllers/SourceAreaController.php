@@ -31,10 +31,14 @@ class SourceAreaController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'sourceArea' => 'required|string',
+            'sourceArea' => 'required|string|unique:source_areas,name',
+        ],
+        [
+            'sourceArea.required' => 'ပွဲရုံအမည် ထည့်သွင်းရန် လိုအပ်ပါသည်။',
+            'sourceArea.unique' => 'ဤပွဲရုံအမည်မှာ ရှိနှင့်ပြီးသား ဖြစ်ပါသည်။'
         ]);
         if($validator->fails()){
-            return back()->with('error', 'အချက်အလက်မှားယွင်းနေပါသည်');
+            return back()->with('error', $validator->errors()->first());
         }
         try{
             $sourceArea = new SourceArea();

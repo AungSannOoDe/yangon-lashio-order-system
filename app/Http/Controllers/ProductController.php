@@ -20,10 +20,14 @@ class ProductController extends Controller
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
             'category_id' => 'required|integer',
-            'product' => 'required|string',
+            'product' => 'required|string|unique:products,name',
+        ],
+        [
+            'product.required' => 'ကုန်အမည် ထည့်သွင်းရန် လိုအပ်ပါသည်။',
+            'product.unique' => 'ဤကုန်အမည်မှာ ရှိနှင့်ပြီးသား ဖြစ်ပါသည်။'
         ]);
         if($validator->fails()){
-            return back()->with('error', 'အချက်အလက်မှားယွင်းနေပါသည်');
+            return back()->with('error', $validator->errors()->first());
         }
         try{
             $product = new Product;

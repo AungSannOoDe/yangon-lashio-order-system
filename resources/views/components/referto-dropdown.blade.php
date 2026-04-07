@@ -6,7 +6,7 @@
 
         <span class="text-sm truncate">
             <i class="fa-solid fa-shop mr-2 text-slate-400 text-xs"></i>
-            {{ request('shop') && request('shop') != 'all' ? request('shop') : 'Filter By Refers To' }}
+            {{ request('shop') ? request('shop') : 'Filter By Refers To' }}
         </span>
 
         <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200" :class="open ? 'rotate-180' : ''"></i>
@@ -15,32 +15,22 @@
     <ul
         x-show="open"
         x-cloak
-        style="display: none;"
         @click.outside="open = false"
-        class="absolute  left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-[110] max-h-60 overflow-y-auto py-1 px-0">
+        class="absolute left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-[110] max-h-60 overflow-y-auto py-1 px-0">
 
+        {{-- ၁။ ဆိုင်အားလုံး (Shop filter ကို ဖြုတ်လိုက်ပြီး Page 1 ကို ပြန်သွားမယ်) --}}
         <li>
-            @php
-                $allUrl = auth()->user()->role_id == 2 ? url('/orders') : url('/user/'.auth()->id().'/orders');
-                $allParams = request()->except('shop');
-                $allFinalUrl = $allUrl . '?' . http_build_query($allParams);
-            @endphp
-            <a href="{{ $allFinalUrl }}"
+            <a href="{{ request()->fullUrlWithQuery(['shop' => null, 'page' => 1]) }}"
                class="block px-4 py-2.5 text-xs font-bold text-indigo-600 hover:bg-indigo-50 border-b border-slate-50">
                 <i class="fa-solid fa-list mr-2"></i>လွှဲပြောင်းဆိုင်အားလုံး
             </a>
         </li>
 
+        {{-- ၂။ ဆိုင်တစ်ခုချင်းစီအလိုက် Filter လုပ်ခြင်း --}}
         @foreach($shops as $shop)
         <li>
-            @php
-                $baseUrl = auth()->user()->role_id == 2 ? '/orders' : '/user/'.auth()->id().'/orders';
-                $params = request()->all();
-                $params['shop'] = $shop->name;
-                $url = $baseUrl . '?' . http_build_query($params);
-            @endphp
-            <a href="{{ $url }}"
-                class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+            <a href="{{ request()->fullUrlWithQuery(['shop' => $shop->name, 'page' => 1]) }}"
+                class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors {{ request('shop') == $shop->name ? 'bg-indigo-50 text-indigo-600' : '' }}">
                 {{ $shop->name }}
             </a>
         </li>

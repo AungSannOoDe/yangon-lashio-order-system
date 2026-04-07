@@ -15,27 +15,22 @@
     <ul
         x-show="open"
         x-cloak
-        style="display: none;"
         @click.outside="open = false"
         class="absolute left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-[110] max-h-60 overflow-y-auto py-1 px-0">
 
+        {{-- 1. View All: Removes 'status' and resets 'page' but keeps other filters --}}
         <li>
-            <a href="{{ auth()->user()->role_id == 2 ? url('/orders') : url('/user/'.auth()->id().'/orders') }}"
+            <a href="{{ request()->fullUrlWithQuery(['status' => null, 'page' => 1]) }}"
                class="w-full block px-4 py-2.5 text-xs font-bold text-indigo-600 hover:bg-indigo-50 border-b border-slate-50">
                 <i class="fa-solid fa-rotate-left mr-2"></i>အားလုံးကြည့်ရန်
             </a>
         </li>
 
+        {{-- 2. Individual Statuses: Updates 'status' and resets 'page' but keeps other filters --}}
         @foreach($statuses as $status)
         <li>
-            @php
-                $baseUrl = auth()->user()->role_id == 2 ? '/orders' : '/user/'.auth()->id().'/orders';
-                $params = request()->all();
-                $params['status'] = $status;
-                $url = $baseUrl . '?' . http_build_query($params);
-            @endphp
-            <a href="{{ $url }}"
-                class="w-full block px-4 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+            <a href="{{ request()->fullUrlWithQuery(['status' => $status, 'page' => 1]) }}"
+                class="w-full block px-4 py-2.5 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors {{ request('status') == $status ? 'bg-indigo-50 text-indigo-600' : '' }}">
                 {{ $status }}
             </a>
         </li>

@@ -32,10 +32,14 @@ class UnitController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'unit' => 'required|string'
+            'unit' => 'required|string|unique:units,name'
+        ],
+        [
+            'unit.required' => 'Unitအမည် ထည့်သွင်းရန် လိုအပ်ပါသည်။',
+            'unit.unique' => 'ဤ Unit ရှိနှင့်ပြီးသား ဖြစ်ပါသည်။',
         ]);
         if($validator->fails()){
-            return back()->with('error', 'အချက်အလက်မှားယွင်းနေပါသည်');
+            return back()->with('error', $validator->errors()->first());
         }
         try{
             $unit = new Unit();

@@ -31,10 +31,14 @@ class ShopController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'shop' => 'required|string',
+            'shop' => 'required|string|unique:shops,name',
+        ],
+        [
+            'shop.required' => 'လွှဲပြောင်းဆိုင်အမည် ထည့်သွင်းရန် လိုအပ်ပါသည်။',
+            'shop.unique' => 'ဤလွှဲပြောင်းဆိုင်အမည်မှာ ရှိနှင့်ပြီးသား ဖြစ်ပါသည်။',
         ]);
         if($validator->fails()){
-            return back()->with('error', 'အချက်အလက်မှားယွင်းနေပါသည်');
+            return back()->with('error', $validator->errors()->first());
         }
         try{
             $shop = new Shop();
